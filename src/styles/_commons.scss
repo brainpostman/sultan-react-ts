@@ -1,0 +1,81 @@
+//fonts
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+$inter: "Inter", sans-serif;
+
+//colors
+
+$color_black: #111111;
+$color_gray: #3f4e65;
+$color_orange: #ffc85e;
+
+//mixin
+
+@mixin container {
+    max-width: 1366px;
+    width: clamp(90.625%, 100% * 1366/1920, 1366px);
+    margin: 0 auto;
+}
+
+@mixin center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+//elements
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: $color_orange;
+    width: 200px;
+    height: 60px;
+    color: #fff;
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    & img {
+        margin-left: 12px;
+    }
+}
+
+.input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 0 20px;
+    border-radius: 9999px;
+    height: 60px;
+    width: 265px;
+    & input {
+        flex: 0 1 auto;
+        background-color: transparent;
+        height: 100%;
+    }
+    & button {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+        cursor: pointer;
+    }
+}
+
+.search {
+    background-color: rgba(237, 237, 237, 1);
+    & input {
+        &::placeholder {
+            color: rgba(92, 99, 112, 0.6);
+        }
+    }
+    & button {
+        background-color: $color_orange;
+    }
+}

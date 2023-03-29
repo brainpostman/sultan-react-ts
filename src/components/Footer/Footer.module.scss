@@ -1,0 +1,132 @@
+@import "src/styles/commons";
+
+.footer {
+    background-color: $color_gray;
+    box-shadow: 0px 15px 70px -11px rgba(43, 28, 1, 0.04);
+    &__container {
+        @include container;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 71px 0 116px 0;
+    }
+
+    & h4 {
+        color: #fff;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    & ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    & li {
+        color: #fff;
+        font-weight: 400px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}
+
+.subscription {
+    flex: 0 1 320px;
+    & p {
+        color: #fff;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.5;
+        margin-top: 15px;
+        margin-bottom: 45px;
+    }
+
+    & label {
+        color: #fff;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    &__input {
+        margin-top: 15px;
+        background-color: #fff;
+        width: 285px;
+        & input {
+            &::placeholder {
+                color: #5c6370;
+                opacity: 0.6;
+            }
+        }
+        & button {
+            background-color: $color_orange;
+        }
+    }
+}
+
+.info {
+    & p {
+        color: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        margin-bottom: 15px;
+    }
+
+    & a:first-of-type {
+        margin-right: 10px;
+    }
+}
+
+.contacts {
+    &__callcenter {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 5px;
+        & a:first-of-type {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        & p {
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #fff;
+        }
+        & a:last-of-type {
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 1.5;
+            text-decoration-line: underline;
+            color: #fff;
+        }
+    }
+
+    &__mail {
+        line-height: 1.3;
+        & a {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        & p {
+            font-weight: 300;
+            font-size: 12px;
+            color: #fff;
+        }
+    }
+
+    &__payment {
+        & img:first-of-type {
+            margin-right: 10px;
+        }
+    }
+}

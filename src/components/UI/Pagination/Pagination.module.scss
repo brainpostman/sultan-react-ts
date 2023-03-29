@@ -1,0 +1,90 @@
+@import "src/styles/commons";
+
+.pagination {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 50px;
+    }
+    &__controls {
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 235px;
+        gap: 35px;
+    }
+}
+
+.arrow {
+    &_left {
+        flex-shrink: 0;
+        height: 12px;
+        width: 12px;
+        border-top: 2px solid $color_orange;
+        border-left: 2px solid $color_orange;
+        transform: rotateZ(-45deg);
+        cursor: pointer;
+        &_inactive {
+            flex-shrink: 0;
+            height: 12px;
+            width: 12px;
+            border-top: 2px solid $color_gray;
+            border-left: 2px solid $color_gray;
+            transform: rotateZ(-45deg);
+        }
+    }
+    &_right {
+        flex-shrink: 0;
+        height: 12px;
+        width: 12px;
+        border-top: 2px solid $color_orange;
+        border-right: 2px solid $color_orange;
+        transform: rotateZ(45deg);
+        cursor: pointer;
+        &_inactive {
+            flex-shrink: 0;
+            height: 12px;
+            width: 12px;
+            border-top: 2px solid $color_gray;
+            border-right: 2px solid $color_gray;
+            transform: rotateZ(45deg);
+        }
+    }
+}
+
+.pageNumbers {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+
+    &__page {
+        @include center-content;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.3;
+        color: $color_gray;
+        cursor: pointer;
+    }
+    &__page_active {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.3;
+        color: $color_gray;
+        position: relative;
+        cursor: pointer;
+        &::before {
+            z-index: -1;
+            content: "";
+            position: absolute;
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, rgba(255, 198, 80, 0.3) 0%, rgba(254, 202, 110, 0.3) 97.25%);
+        }
+        @include center-content;
+    }
+}

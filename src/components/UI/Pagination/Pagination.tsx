@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import List from "../List";
+import { useEffect, useState } from 'react';
+import List from '../List';
 import cl from './Pagination.module.scss';
 
 interface PaginationProps<T> {
@@ -7,11 +7,14 @@ interface PaginationProps<T> {
     className?: string;
     renderItem: (item: T) => React.ReactNode;
     itemsPerPage: number;
-    visiblePages: number;
 }
 
-export default function Pagination<T,>({ items, className, renderItem, itemsPerPage }: PaginationProps<T>) {
-
+export default function Pagination<T>({
+    items,
+    className,
+    renderItem,
+    itemsPerPage,
+}: PaginationProps<T>) {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
@@ -36,26 +39,29 @@ export default function Pagination<T,>({ items, className, renderItem, itemsPerP
         if (currentPage === 0) return;
         let newPage = currentPage - 1;
         const newOffset = newPage * itemsPerPage;
-        setCurrentPage(newPage)
+        setCurrentPage(newPage);
         setItemOffset(newOffset);
-    }
+    };
 
     const handleNextClick = () => {
         if (currentPage === pageNumbers.length - 1) return;
         let newPage = currentPage + 1;
         const newOffset = newPage * itemsPerPage;
-        setCurrentPage(newPage)
+        setCurrentPage(newPage);
         setItemOffset(newOffset);
-    }
-
-    const resetPagination = () => {
-        setItemOffset(0);
-        setCurrentPage(0);
-    }
+    };
 
     useEffect(() => {
-        resetPagination();
-    }, [items])
+        setItemOffset(0);
+        setCurrentPage(0);
+    }, [items]);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, [currentPage]);
 
     return (
         <div className={cl.pagination__container}>
@@ -64,25 +70,43 @@ export default function Pagination<T,>({ items, className, renderItem, itemsPerP
                 renderItem={renderItem}
                 className={className}
             />
-            {!(items.length <= itemsPerPage) &&
+            {!(items.length <= itemsPerPage) && (
                 <div className={cl.pagination__controls}>
                     <div
-                        className={(currentPage === 0) ? cl.arrow_left_inactive : cl.arrow_left}
-                        onClick={handlePrevClick} />
+                        className={
+                            currentPage === 0
+                                ? cl.arrow_left_inactive
+                                : cl.arrow_left
+                        }
+                        onClick={handlePrevClick}
+                    />
                     <div className={cl.pageNumbers}>
-                        {pageNumbers.map(item => {
-                            return <span
-                                className={(item === currentPage) ? cl.pageNumbers__page_active : cl.pageNumbers__page}
-                                key={item}
-                                onClick={() => handlePageClick(item)}>
-                                {item + 1}
-                            </span>
+                        {pageNumbers.map((item) => {
+                            return (
+                                <span
+                                    className={
+                                        item === currentPage
+                                            ? cl.pageNumbers__page_active
+                                            : cl.pageNumbers__page
+                                    }
+                                    key={item}
+                                    onClick={() => handlePageClick(item)}
+                                >
+                                    {item + 1}
+                                </span>
+                            );
                         })}
                     </div>
                     <div
-                        className={(currentPage === pageNumbers.length - 1) ? cl.arrow_right_inactive : cl.arrow_right}
-                        onClick={handleNextClick} />
-                </div>}
+                        className={
+                            currentPage === pageNumbers.length - 1
+                                ? cl.arrow_right_inactive
+                                : cl.arrow_right
+                        }
+                        onClick={handleNextClick}
+                    />
+                </div>
+            )}
         </div>
-    )
+    );
 }

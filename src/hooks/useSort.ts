@@ -1,8 +1,12 @@
-import { useMemo } from "react";
-import { IShopItem } from "../types/shopItem";
-import { sortByPrice, sortByName } from "../utils/catalogSortCallbacks";
+import { useMemo } from 'react';
+import { ICatalogItem } from '../types/catalogItem';
+import { sortByPrice, sortByName } from '../utils/catalogSortCallbacks';
 
-const useCareFilter = (items: IShopItem[], sortType: string, sortDirection: string): IShopItem[] => {
+const useCareFilter = (
+    items: ICatalogItem[],
+    sortType: string,
+    sortDirection: string
+): ICatalogItem[] => {
     const sortedItems = useMemo(() => {
         switch (sortType) {
             case 'price':
@@ -22,6 +26,6 @@ const useCareFilter = (items: IShopItem[], sortType: string, sortDirection: stri
         }
     }, [items, sortType, sortDirection]);
     return sortedItems;
-}
+};
 
 export default useCareFilter;

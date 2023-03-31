@@ -1,30 +1,34 @@
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Catalog from './components/Catalog/Catalog';
-
 import './styles/main.scss';
-import { useEffect, useState } from 'react';
-import { IShopItem } from './types/shopItem';
-import catalogJson from './catalog.json';
+import Cart from './components/Cart/Cart';
+import ItemCard from './components/ItemCard/ItemCard';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import ScrollToTop from './components/UI/ScrollToTop';
+import Login from './components/Admin/Login';
 
 function App() {
-
-  let catalogStr: string | null = JSON.stringify(catalogJson);
-  localStorage.setItem('catalog', catalogStr);
-  localStorage.setItem('catalogImgPath', 'src/assets/images/catalog/');
-  catalogStr = localStorage.getItem('catalog');
-  let catalogArr: IShopItem[] = [];
-  if (catalogStr) {
-    catalogArr = JSON.parse(catalogStr);
-  }
-
-  const [catalog, setCatalog] = useState<IShopItem[]>(catalogArr);
-
-  return <div className='wrapper'>
-    <Header />
-    <Catalog catalog={catalog} />
-    <Footer />
-  </div>
+    return (
+        <div className="wrapper">
+            <BrowserRouter>
+                <ScrollToTop />
+                <Header />
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<Navigate to="catalog" replace />}
+                    />
+                    <Route path="catalog/*" element={<Catalog />} />
+                    <Route path="catalog/:code" element={<ItemCard />} />
+                    <Route path="cart" element={<Cart />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="login" element={<Login />} />
+                </Routes>
+                <Footer />
+            </BrowserRouter>
+        </div>
+    );
 }
 
-export default App
+export default App;

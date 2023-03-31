@@ -6,44 +6,99 @@ export default function Footer() {
             <div className={cl.footer__container}>
                 <div className={cl.subscription}>
                     <div className={cl.subscription__logo}>
-                        <img src="src\assets\images\footer\sultan.svg" alt="СУЛТАН" />
+                        <img
+                            src="src\assets\images\footer\sultan.svg"
+                            alt="СУЛТАН"
+                        />
                     </div>
-                    <p>Компания «Султан» — снабжаем розничные магазины товарами &quot;под ключ&quot; в Кокчетаве и Акмолинской области</p>
-                    <form id='email-sub' onSubmit={e => e.preventDefault()}>
-                        <label htmlFor='email-sub'>Подпишись на скидки и акции</label>
-                        <div className={`${cl.input} ${cl.subscription__input}`}>
-                            <input type="email" name='email-sub' placeholder='Введите ваш E-mail' />
-                            <button form='email-sub' type='submit'><img src="src\assets\images\footer\arrow.svg" alt="" /></button></div>
+                    <p>
+                        Компания «Султан» — снабжаем розничные магазины товарами
+                        &quot;под ключ&quot; в Кокчетаве и Акмолинской области
+                    </p>
+                    <form id="email-sub" onSubmit={(e) => e.preventDefault()}>
+                        <label htmlFor="email-sub">
+                            Подпишись на скидки и акции
+                        </label>
+                        <div
+                            className={`${cl.input} ${cl.subscription__input}`}
+                        >
+                            <input
+                                type="email"
+                                name="email-sub"
+                                placeholder="Введите ваш E-mail"
+                            />
+                            <button form="email-sub" type="submit">
+                                <img
+                                    src="src\assets\images\footer\arrow.svg"
+                                    alt=""
+                                />
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <nav>
                     <h4>Меню сайта:</h4>
                     <ul>
-                        <li><a href="">О компании</a></li>
-                        <li><a href="">Доставка и оплата</a></li>
-                        <li><a href="">Возврат</a></li>
-                        <li><a href="">Контакты</a></li>
+                        <li>
+                            <a href="">О компании</a>
+                        </li>
+                        <li>
+                            <a href="">Доставка и оплата</a>
+                        </li>
+                        <li>
+                            <a href="">Возврат</a>
+                        </li>
+                        <li>
+                            <a href="">Контакты</a>
+                        </li>
                     </ul>
                 </nav>
                 <nav>
                     <h4>Категории:</h4>
                     <ul>
-                        <li><a href="">Бытовая химия</a></li>
-                        <li><a href="">Косметика и гигиена</a></li>
-                        <li><a href="">Товары для дома</a></li>
-                        <li><a href="">Товары для детей и мам</a></li>
-                        <li><a href="">Посуда</a></li>
+                        <li>
+                            <a href="">Бытовая химия</a>
+                        </li>
+                        <li>
+                            <a href="">Косметика и гигиена</a>
+                        </li>
+                        <li>
+                            <a href="">Товары для дома</a>
+                        </li>
+                        <li>
+                            <a href="">Товары для детей и мам</a>
+                        </li>
+                        <li>
+                            <a href="">Посуда</a>
+                        </li>
                     </ul>
                 </nav>
                 <div className={cl.info}>
                     <h4>Скачать прайс-лист:</h4>
                     <ul>
                         <li>
-                            <button className={cl.btn}>Прайс-лист<img src="src\assets\images\header\download.svg" alt="" /></button>
+                            <button className={cl.btn}>
+                                Прайс-лист
+                                <img
+                                    src="src\assets\images\header\download.svg"
+                                    alt=""
+                                />
+                            </button>
                         </li>
                         <li className={cl.info__messengers}>
                             <p>Связь в мессенджерах:</p>
-                            <a href=""><img src="src\assets\images\footer\whatsapp.svg" alt="WhatsApp" /></a><a href=""><img src="src\assets\images\footer\telegram.svg" alt="Telegram" /></a>
+                            <a href="">
+                                <img
+                                    src="src\assets\images\footer\whatsapp.svg"
+                                    alt="WhatsApp"
+                                />
+                            </a>
+                            <a href="">
+                                <img
+                                    src="src\assets\images\footer\telegram.svg"
+                                    alt="Telegram"
+                                />
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -56,12 +111,18 @@ export default function Footer() {
                             <a href="">Заказать звонок</a>
                         </li>
                         <li className={cl.contacts__mail}>
-                            <a href="">opt.sultan@mail.ru
-                            </a>
+                            <a href="">opt.sultan@mail.ru</a>
                             <p>На связи в любое время</p>
                         </li>
                         <li className={cl.contacts__payment}>
-                            <img src="src\assets\images\footer\visa.svg" alt="Visa" /><img src="src\assets\images\footer\mastercard.svg" alt="Master Card" />
+                            <img
+                                src="src\assets\images\footer\visa.svg"
+                                alt="Visa"
+                            />
+                            <img
+                                src="src\assets\images\footer\mastercard.svg"
+                                alt="Master Card"
+                            />
                         </li>
                     </ul>
                 </div>

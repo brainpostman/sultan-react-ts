@@ -55,16 +55,32 @@
 
     &__input {
         margin-top: 15px;
-        background-color: #fff;
+        background-color: rgba(237, 237, 237, 0.8);
         width: 285px;
+        outline: 1px solid transparent;
+        transition: background-color 150ms ease-in-out, outline 150ms ease-in-out;
         & input {
             &::placeholder {
                 color: #5c6370;
                 opacity: 0.6;
             }
         }
+        &:has(input:focus) {
+            background-color: rgba(237, 237, 237, 1);
+            outline: 1px solid $color_orange;
+        }
+        &:has(button:active) {
+            outline: 1px solid transparent;
+        }
         & button {
             background-color: $color_orange;
+            transition: background-color 100ms ease-in-out, box-shadow 100ms ease;
+            &:hover {
+                background-color: #ffaa00;
+            }
+            &:active {
+                box-shadow: inset 0px 0px 15px 2px rgba(43, 28, 1, 0.3);
+            }
         }
     }
 }
@@ -80,6 +96,12 @@
 
     & a:first-of-type {
         margin-right: 10px;
+    }
+}
+
+nav li {
+    &:hover {
+        text-decoration: underline;
     }
 }
 
@@ -115,6 +137,9 @@
         & a {
             font-weight: 600;
             font-size: 14px;
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         & p {

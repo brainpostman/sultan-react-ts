@@ -9,12 +9,18 @@
     & span {
         padding: 0 10px;
         border-right: 1px dashed rgba(63, 78, 101, 0.3);
+        &:hover {
+            text-decoration: underline;
+        }
         &:first-of-type {
             padding-left: 0;
         }
         &:last-of-type {
             opacity: 0.5;
             border-right: none;
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 }

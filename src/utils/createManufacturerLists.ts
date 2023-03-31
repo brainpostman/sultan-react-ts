@@ -1,6 +1,8 @@
-import { IManufacturerInfo, IShopItem } from "../types/shopItem";
+import { IManufacturerInfo, ICatalogItem } from '../types/catalogItem';
 
-export function createManufacturerMap(catalog: IShopItem[]): Map<string, IManufacturerInfo> {
+export function createManufacturerMap(
+    catalog: ICatalogItem[]
+): Map<string, IManufacturerInfo> {
     const tempMap = new Map<string, number>();
 
     for (let item of catalog) {
@@ -14,7 +16,7 @@ export function createManufacturerMap(catalog: IShopItem[]): Map<string, IManufa
     const manufacturersMap = new Map<string, IManufacturerInfo>();
 
     for (let [name, amount] of tempMap.entries()) {
-        manufacturersMap.set(name , { name, amount, checked: false });
+        manufacturersMap.set(name, { name, amount, checked: false });
     }
 
     return manufacturersMap;

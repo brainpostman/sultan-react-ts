@@ -1,21 +1,28 @@
-import { ICareType } from "../../types/shopItem";
+import { ICareFilter } from '../../types/catalogItem';
 
 interface ICareFilterProps {
-    filter: ICareType;
+    filter: ICareFilter;
     onClick: (type: string) => void;
     className?: string;
     active?: string;
 }
 
-const CareFilter = ({ filter, onClick, className, active }: ICareFilterProps) => {
-
-    const activeClass = (filter.checked) ? `${active} ` : '';
+const CareFilter = ({
+    filter,
+    onClick,
+    className,
+    active,
+}: ICareFilterProps) => {
+    const activeClass = filter.checked ? `${active} ` : '';
 
     return (
-        <div className={`${activeClass}${className}`} onClick={() => onClick(filter.type)}>
+        <div
+            className={`${activeClass}${className}`}
+            onClick={() => onClick(filter.type)}
+        >
             {filter.value}
         </div>
-    )
-}
+    );
+};
 
 export default CareFilter;

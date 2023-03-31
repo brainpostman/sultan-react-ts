@@ -553,12 +553,12 @@
     },
     {
         "img": "A0000643845.jpg",
-        "name": "Влажные салфетки Eco Line Ромашка",
+        "name": "Влажные салфетки Ecoline Ромашка",
         "unit": "шт",
         "amount": 15,
         "code": "A0000643845",
         "mnfct": "РУСАЛОЧКА",
-        "brand": "РУСАЛОЧКА",
+        "brand": "Ecoline",
         "descr": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         "price": 21.53,
         "types": {
@@ -678,7 +678,7 @@
         "amount": 10,
         "code": "A0000010033",
         "mnfct": "РУСАЛОЧКА",
-        "brand": "РУСАЛОЧКА",
+        "brand": "Ecoline",
         "descr": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         "price": 8.76,
         "types": {
@@ -775,7 +775,7 @@
         "code": "A0000000020",
         "mnfct": "TRUSSARDI",
         "brand": "TRUSSARDI",
-        "descr": "Туалетная вода, спрей 50 мл + Шампунь для тела и волос 100 мл",
+        "descr": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         "price": 5849,
         "types": {
             "body": true,

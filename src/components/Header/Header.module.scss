@@ -34,6 +34,9 @@
         & a {
             font-weight: 600;
             font-size: 14px;
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         & p {
@@ -70,6 +73,9 @@
             border-right: none;
             padding-right: 0;
         }
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 
@@ -102,13 +108,28 @@
 
 .search {
     background-color: rgba(237, 237, 237, 1);
+    outline: 1px solid transparent;
+    transition: background-color 150ms ease-in-out, outline 150ms ease-in-out;
     & input {
         &::placeholder {
             color: rgba(92, 99, 112, 0.6);
         }
     }
+    &:has(input:focus) {
+        background-color: rgba(237, 237, 237, 0.4);
+        outline: 1px solid $color_orange;
+    }
+    &:has(button:active) {
+        outline: 1px solid transparent;
+    }
     & button {
         background-color: $color_orange;
+        &:hover {
+            background-color: #ffaa00;
+        }
+        &:active {
+            box-shadow: inset 0px 0px 15px 2px rgba(43, 28, 1, 0.3);
+        }
     }
 }
 
@@ -165,8 +186,37 @@
     align-items: center;
     gap: 20px;
     padding-left: 25px;
+    &:hover {
+        text-decoration: underline;
+        .cart__icon::before {
+            z-index: -1;
+            content: "";
+            position: absolute;
+            height: 60px;
+            width: 60px;
+            background: linear-gradient(90deg, rgba(255, 198, 80, 0.3) 0%, rgba(254, 202, 110, 0.3) 97.25%);
+            transform: scale(1);
+            border-radius: 50%;
+            left: -7px;
+            top: -15.5px;
+        }
+    }
     &__icon {
         position: relative;
+        z-index: 1;
+        &::before {
+            z-index: -1;
+            content: "";
+            position: absolute;
+            height: 60px;
+            width: 60px;
+            background: linear-gradient(90deg, rgba(255, 198, 80, 0.3) 0%, rgba(254, 202, 110, 0.3) 97.25%);
+            transform: scale(0);
+            border-radius: 50%;
+            left: -7px;
+            top: -15.5px;
+            transition: transform 200ms ease-in-out;
+        }
     }
     &__items {
         display: flex;

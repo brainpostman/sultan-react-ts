@@ -1,17 +1,19 @@
-import { useState } from "react";
-import { ICareType } from "../types/shopItem";
-import deepCopyMap from "../utils/deepCopyMap";
+import { useState } from 'react';
+import { ICareFilter } from '../types/catalogItem';
+import deepCopyMap from '../utils/deepCopyMap';
 
 interface ICareState {
-    careFilters: Map<string, ICareType>,
-    activeCareFilters: Set<string>,
-    updateCareFilter: (type: string) => void
+    careFilters: Map<string, ICareFilter>;
+    activeCareFilters: Set<string>;
+    updateCareFilter: (type: string) => void;
 }
 
-const useCareState = (defaultCareTypes: Map<string, ICareType>): ICareState => {
-
-    const [careFilters, setCareFilters] = useState<Map<string, ICareType>>(defaultCareTypes);
-    const [activeCareFilters, setActiveCareFilters] = useState<Set<string>>(new Set<string>);
+const useCareState = (defaultCareTypes: Map<string, ICareFilter>): ICareState => {
+    const [careFilters, setCareFilters] =
+        useState<Map<string, ICareFilter>>(defaultCareTypes);
+    const [activeCareFilters, setActiveCareFilters] = useState<Set<string>>(
+        new Set<string>()
+    );
 
     const updateCareFilter = (type: string) => {
         const activeFilters = new Set(activeCareFilters);
@@ -28,6 +30,6 @@ const useCareState = (defaultCareTypes: Map<string, ICareType>): ICareState => {
     };
 
     return { careFilters, activeCareFilters, updateCareFilter };
-}
+};
 
 export default useCareState;

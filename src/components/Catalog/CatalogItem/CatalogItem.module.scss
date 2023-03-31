@@ -12,7 +12,7 @@
     padding: 0 22px 30px 22px;
     &__image {
         @include center-content;
-        max-height: 200px;
+        height: 200px;
         width: 100%;
         margin: 42px auto 4px auto;
         & img {
@@ -53,6 +53,9 @@
         max-width: 282px;
         & span {
             font-weight: 700;
+        }
+        &:hover {
+            text-decoration: underline;
         }
     }
 

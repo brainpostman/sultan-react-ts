@@ -3,11 +3,10 @@ import {
     CatalogAction,
     CatalogActionTypes,
 } from '../../types/catalogItem';
-import { createCatalogMap } from '../../utils/catalogLocalStorageUpdate';
-import catalogJson from '../../catalog.json';
+import { createCatalogMap } from '../../utils/createCatalogMap';
 
 const initialState = {
-    items: createCatalogMap(catalogJson),
+    items: createCatalogMap(),
 };
 
 export const catalogReducer = (

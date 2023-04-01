@@ -6,10 +6,7 @@ export default function Footer() {
             <div className={cl.footer__container}>
                 <div className={cl.subscription}>
                     <div className={cl.subscription__logo}>
-                        <img
-                            src="src\assets\images\footer\sultan.svg"
-                            alt="СУЛТАН"
-                        />
+                        <img src="/images/footer/sultan.svg" alt="СУЛТАН" />
                     </div>
                     <p>
                         Компания «Султан» — снабжаем розничные магазины товарами
@@ -28,10 +25,7 @@ export default function Footer() {
                                 placeholder="Введите ваш E-mail"
                             />
                             <button form="email-sub" type="submit">
-                                <img
-                                    src="src\assets\images\footer\arrow.svg"
-                                    alt=""
-                                />
+                                <img src="/images/footer/arrow.svg" alt="" />
                             </button>
                         </div>
                     </form>
@@ -79,23 +73,20 @@ export default function Footer() {
                         <li>
                             <button className={cl.btn}>
                                 Прайс-лист
-                                <img
-                                    src="src\assets\images\header\download.svg"
-                                    alt=""
-                                />
+                                <img src="/images/header/download.svg" alt="" />
                             </button>
                         </li>
                         <li className={cl.info__messengers}>
                             <p>Связь в мессенджерах:</p>
                             <a href="">
                                 <img
-                                    src="src\assets\images\footer\whatsapp.svg"
+                                    src="/images/footer/whatsapp.svg"
                                     alt="WhatsApp"
                                 />
                             </a>
                             <a href="">
                                 <img
-                                    src="src\assets\images\footer\telegram.svg"
+                                    src="/images/footer/telegram.svg"
                                     alt="Telegram"
                                 />
                             </a>
@@ -115,12 +106,9 @@ export default function Footer() {
                             <p>На связи в любое время</p>
                         </li>
                         <li className={cl.contacts__payment}>
+                            <img src="/images/footer/visa.svg" alt="Visa" />
                             <img
-                                src="src\assets\images\footer\visa.svg"
-                                alt="Visa"
-                            />
-                            <img
-                                src="src\assets\images\footer\mastercard.svg"
+                                src="/images/footer/mastercard.svg"
                                 alt="Master Card"
                             />
                         </li>

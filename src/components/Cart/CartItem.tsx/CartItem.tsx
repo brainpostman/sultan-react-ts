@@ -9,14 +9,13 @@ import {
 } from '../../../store/action-creators/cartActions';
 import { ICartItem } from '../../../types/cartItem';
 import cl from './CartItem.module.scss';
+import MyImage from '../../UI/MyImage';
 
 interface CatalogItemProps {
     item: ICartItem;
-    imgPath: string;
 }
 
-const CartItem = ({ item, imgPath }: CatalogItemProps) => {
-    const [imgIsLoaded, setImgIsLoaded] = useState(true);
+const CartItem = ({ item }: CatalogItemProps) => {
     const [editingQuantity, setEditingQuantity] = useState(false);
     const [inputValue, setInputValue] = useState(String(item.inCart));
     const quantityInputRef = useRef<HTMLInputElement>(null);
@@ -49,7 +48,7 @@ const CartItem = ({ item, imgPath }: CatalogItemProps) => {
             setInputValue('9999');
             return;
         }
-        setInputValue(`${+newInput}`);
+        setInputValue(`${newInput}`);
     };
 
     const handleInputBlur = () => {
@@ -60,31 +59,17 @@ const CartItem = ({ item, imgPath }: CatalogItemProps) => {
 
     return (
         <div className={cl.item}>
-            <div className={cl.item__image}>
-                {imgIsLoaded ? (
-                    <img
-                        src={`${imgPath}${item.img}`}
-                        onLoad={() => {
-                            setImgIsLoaded(true);
-                        }}
-                        onError={() => {
-                            setImgIsLoaded(false);
-                        }}
-                    />
-                ) : (
-                    <div className={cl.item__imgerror}>
-                        Изображение
-                        <br />
-                        недоступно
-                    </div>
-                )}
-            </div>
+            <MyImage
+                src={item.img}
+                containerClass={cl.item__image}
+                errorClass={cl.item__imgerror}
+            />
             <div className={cl.item__info}>
                 <p className={cl.item__unit}>
                     {item.unit === 'мл' ? (
-                        <img src="src/assets/images/whh_bottle.svg" />
+                        <img src="/images/whh_bottle.svg" />
                     ) : (
-                        <img src="src/assets/images/fa-solid_box-open.svg" />
+                        <img src="/images/fa-solid_box-open.svg" />
                     )}
                     <span>
                         {item.amount} {item.unit}
@@ -144,7 +129,7 @@ const CartItem = ({ item, imgPath }: CatalogItemProps) => {
                         className={`${cl.item__deletebtn} ${cl.btn}`}
                         onClick={handleRemoveItem}
                     >
-                        <img src="src/assets/images/trash.svg" alt="Удалить" />
+                        <img src="/images/trash.svg" alt="Удалить" />
                     </button>
                 </div>
             </div>

@@ -8,7 +8,9 @@ interface ICareState {
     updateCareFilter: (type: string) => void;
 }
 
-const useCareState = (defaultCareTypes: Map<string, ICareFilter>): ICareState => {
+const useCareState = (
+    defaultCareTypes: Map<string, ICareFilter>
+): ICareState => {
     const [careFilters, setCareFilters] =
         useState<Map<string, ICareFilter>>(defaultCareTypes);
     const [activeCareFilters, setActiveCareFilters] = useState<Set<string>>(

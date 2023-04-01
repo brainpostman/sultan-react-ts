@@ -1,47 +1,40 @@
-import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { addItem } from '../../../store/action-creators/cartActions';
-import { ICatalogItem } from '../../../types/catalogItem';
+import { ICatalogItem, CareFilters } from '../../../types/catalogItem';
 import cl from './CatalogItem.module.scss';
+import MyImage from '../../UI/MyImage';
 
 interface CatalogItemProps {
     item: ICatalogItem;
-    imgPath: string;
 }
 
-const CatalogItem = ({ item, imgPath }: CatalogItemProps) => {
-    const [imgIsLoaded, setImgIsLoaded] = useState(true);
+const CatalogItem = ({ item }: CatalogItemProps) => {
     const dispatch = useDispatch();
     const handleAddItem = () => dispatch(addItem(item));
 
+    let careTypes: string[] = [];
+    let careTypesObj = item.types;
+    let defaultCareFilters = new CareFilters();
+    for (let careType in careTypesObj) {
+        if (careTypesObj[careType as keyof typeof careTypesObj]) {
+            careTypes.push(defaultCareFilters[careType].value);
+        }
+    }
+
     return (
         <div className={cl.item}>
-            <div className={cl.item__image}>
-                {imgIsLoaded ? (
-                    <img
-                        src={`${imgPath}${item.img}`}
-                        onLoad={() => {
-                            setImgIsLoaded(true);
-                        }}
-                        onError={() => {
-                            setImgIsLoaded(false);
-                        }}
-                    />
-                ) : (
-                    <div className={cl.item__imgerror}>
-                        Изображение
-                        <br />
-                        недоступно
-                    </div>
-                )}
-            </div>
+            <MyImage
+                src={item.img}
+                containerClass={cl.item__image}
+                errorClass={cl.item__imgerror}
+            />
             <p className={cl.item__quantity}>
                 {item.unit === 'мл' ? (
-                    <img src="src/assets/images/whh_bottle.svg" />
+                    <img src="/images/whh_bottle.svg" />
                 ) : (
-                    <img src="src/assets/images/fa-solid_box-open.svg" />
+                    <img src="/images/fa-solid_box-open.svg" />
                 )}
                 <span>
                     {item.amount} {item.unit}
@@ -66,6 +59,9 @@ const CatalogItem = ({ item, imgPath }: CatalogItemProps) => {
                 <p>
                     Бренд: <span>{item.brand}</span>
                 </p>
+                <p>
+                    Типы ухода: <span>{careTypes.join(', ')}</span>
+                </p>
             </div>
             <div className={cl.item__purchase}>
                 <span className={cl.item__price}>
@@ -77,7 +73,7 @@ const CatalogItem = ({ item, imgPath }: CatalogItemProps) => {
                     className={`${cl.btn} ${cl.item__buy}`}
                     onClick={handleAddItem}
                 >
-                    В КОРЗИНУ <img src="src\assets\images\basket.svg" alt="" />
+                    В КОРЗИНУ <img src="images/basket.svg" alt="" />
                 </button>
             </div>
         </div>

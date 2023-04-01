@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { emptyCart } from '../../store/action-creators/cartActions';
 import { ICartItem } from '../../types/cartItem';
-import { getLocalImgPath } from '../../utils/catalogLocalStorageUpdate';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import List from '../UI/List';
 import Modal from '../UI/Modal/Modal';
@@ -14,7 +13,6 @@ const Cart = () => {
     const { items, sum } = useTypedSelector((state) => state.cart);
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
-    const catalogImgPath = getLocalImgPath();
 
     const handleOrder = () => {
         if (sum > 0) {
@@ -37,13 +35,7 @@ const Cart = () => {
                 <List
                     items={Array.from(items.values())}
                     renderItem={(item: ICartItem) => {
-                        return (
-                            <CartItem
-                                item={item}
-                                imgPath={catalogImgPath}
-                                key={item.code}
-                            />
-                        );
+                        return <CartItem item={item} key={item.code} />;
                     }}
                     className={cl.cart__list}
                 />
@@ -70,7 +62,7 @@ const Cart = () => {
                                     onClick={() => setShowModal(false)}
                                 ></div>
                                 <div className={cl.modalcheck}>
-                                    <img src="src/assets/images/double-check.svg" />
+                                    <img src="/images/double-check.svg" />
                                 </div>
                                 <h3>СПАСИБО ЗА ЗАКАЗ</h3>
                                 <p>

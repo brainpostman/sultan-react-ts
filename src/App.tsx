@@ -6,7 +6,7 @@ import Cart from './components/Cart/Cart';
 import ItemCard from './components/ItemCard/ItemCard';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ScrollToTop from './components/UI/ScrollToTop';
-import Login from './components/Admin/Login';
+import Admin from './components/Admin/Admin';
 
 function App() {
     return (
@@ -23,7 +23,7 @@ function App() {
                     <Route path="catalog/:code" element={<ItemCard />} />
                     <Route path="cart" element={<Cart />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
-                    <Route path="login" element={<Login />} />
+                    <Route path="admin" element={<Admin />} />
                 </Routes>
                 <Footer />
             </BrowserRouter>

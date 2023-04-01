@@ -1,4 +1,3 @@
-import { defaultCareFilters, mockObj } from '../../types/catalogItem';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import cl from './ItemCard.module.scss';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
@@ -11,18 +10,17 @@ import {
     addItem,
 } from '../../store/action-creators/cartActions';
 import { Link, useParams } from 'react-router-dom';
-import { getLocalImgPath } from '../../utils/catalogLocalStorageUpdate';
+import MyImage from '../UI/MyImage';
+import { CareFilters, CatalogItem } from '../../types/catalogItem';
 
 const ItemCard = () => {
     const { code } = useParams();
-    const catalogImgPath = getLocalImgPath();
 
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
     const { items: cartItems } = useTypedSelector((state) => state.cart);
-    const item = catalogItems.get(code || 'A0000626419') || mockObj;
+    const item = catalogItems.get(code || 'A0000626419') || new CatalogItem();
     const itemInCart = cartItems.get(item.code);
 
-    const [imgIsLoaded, setImgIsLoaded] = useState(true);
     const [editingQuantity, setEditingQuantity] = useState(false);
     const [inputValue, setInputValue] = useState(
         String(itemInCart?.inCart || 0)
@@ -31,8 +29,9 @@ const ItemCard = () => {
 
     let careTypes: string[] = [];
     let careTypesObj = item.types;
+    let defaultCareFilters = new CareFilters();
     for (let careType in careTypesObj) {
-        if (careTypesObj[careType]) {
+        if (careTypesObj[careType as keyof typeof careTypesObj]) {
             careTypes.push(defaultCareFilters[careType].value);
         }
     }
@@ -100,25 +99,11 @@ const ItemCard = () => {
                     <span>{`${item.brand} ${item.name}`}</span>
                 </Breadcrumbs>
                 <section className={cl.item}>
-                    <div className={cl.image}>
-                        {imgIsLoaded ? (
-                            <img
-                                src={`${catalogImgPath}${item.img}`}
-                                onLoad={() => {
-                                    setImgIsLoaded(true);
-                                }}
-                                onError={() => {
-                                    setImgIsLoaded(false);
-                                }}
-                            />
-                        ) : (
-                            <div className={cl.imgerror}>
-                                Изображение
-                                <br />
-                                недоступно
-                            </div>
-                        )}
-                    </div>
+                    <MyImage
+                        src={item.img}
+                        containerClass={cl.image}
+                        errorClass={cl.imgerror}
+                    />
                     <div className={cl.itemInfo}>
                         <p className={cl.instore}>В наличии</p>
                         <h2 className={cl.name}>
@@ -126,9 +111,9 @@ const ItemCard = () => {
                         </h2>
                         <p className={cl.unit}>
                             {item.unit === 'мл' ? (
-                                <img src="src/assets/images/whh_bottle.svg" />
+                                <img src="/images/whh_bottle.svg" />
                             ) : (
-                                <img src="src/assets/images/fa-solid_box-open.svg" />
+                                <img src="/images/fa-solid_box-open.svg" />
                             )}
                             <span>
                                 {item.amount} {item.unit}
@@ -179,16 +164,13 @@ const ItemCard = () => {
                                 onClick={handleAddItem}
                             >
                                 В КОРЗИНУ{' '}
-                                <img
-                                    src="src\assets\images\basket.svg"
-                                    alt=""
-                                />
+                                <img src="/images/basket.svg" alt="" />
                             </button>
                         </div>
                         <div className={cl.buttons}>
                             <div className={cl.share}>
                                 <img
-                                    src="src/assets/images/ci_share.svg"
+                                    src="/images/ci_share.svg"
                                     alt="Поделиться"
                                 />
                             </div>
@@ -200,7 +182,7 @@ const ItemCard = () => {
                             </div>
                             <button className={cl.pricelist}>
                                 Прайс-лист
-                                <img src="src\assets\images\download-gray.svg" />
+                                <img src="/images/download-gray.svg" />
                             </button>
                         </div>
                         <div className={cl.info}>

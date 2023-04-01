@@ -6,7 +6,7 @@ import useSort from '../../hooks/useSort';
 import {
     ICatalogItem,
     ICareFilter,
-    defaultCareFilters,
+    CareFilters,
     IManufacturerInfo,
 } from '../../types/catalogItem';
 import { createManufacturerMap } from '../../utils/createManufacturerLists';
@@ -18,19 +18,15 @@ import Select from '../UI/Select/Select';
 import CareFilter from './CareFilter';
 import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
-import {
-    createCatalogArr,
-    getLocalImgPath,
-} from '../../utils/catalogLocalStorageUpdate';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const Catalog = () => {
-    //получение каталога из localStorage
+    //получение каталога из store (а там из localStorage)
+    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
+
     const catalogArr = useMemo(() => {
-        return createCatalogArr();
-    }, [localStorage.getItem('catalog')]);
-
-    const catalogImgPath = getLocalImgPath();
-
+        return Array.from(catalogItems.values());
+    }, [catalogItems]);
     //состояния каталога
     const [items, setItems] = useState<ICatalogItem[]>(catalogArr);
     //состояния фильтров производителей и промежутка цен
@@ -51,6 +47,7 @@ const Catalog = () => {
     } = useMnfctState(manufacturersMap);
     //состояние фильтра типа ухода
     const careFiltersMap = new Map<string, ICareFilter>();
+    const defaultCareFilters = new CareFilters();
     for (let filter in defaultCareFilters) {
         careFiltersMap.set(filter, defaultCareFilters[filter]);
     }
@@ -158,7 +155,6 @@ const Catalog = () => {
         <main className={cl.catalog}>
             <div className={cl.catalog__container}>
                 <Breadcrumbs>
-                    <span>Главная</span>
                     <span>Каталог</span>
                 </Breadcrumbs>
                 <section className={cl.catalog__titleAndSort}>
@@ -246,7 +242,7 @@ const Catalog = () => {
                                 />
                                 <button>
                                     <img
-                                        src="src\assets\images\header\search.svg"
+                                        src="images/header/search.svg"
                                         alt="Поиск"
                                     />
                                 </button>
@@ -260,7 +256,6 @@ const Catalog = () => {
                                             onChange={updateMnfctFlags}
                                             checked={item.checked}
                                             key={item.name}
-                                            id={item.name}
                                             className={cl.mnfct__item}
                                         >
                                             {item.name}
@@ -317,7 +312,7 @@ const Catalog = () => {
                                     className={cl.btn}
                                     onClick={clearFilters}
                                 >
-                                    <img src="src/assets/images/trash.svg" />
+                                    <img src="/images/trash.svg" />
                                 </button>
                             </div>
                         </div>
@@ -341,13 +336,7 @@ const Catalog = () => {
                         items={filteredByNamePrice}
                         itemsPerPage={9}
                         renderItem={(item: ICatalogItem) => {
-                            return (
-                                <CatalogItem
-                                    item={item}
-                                    imgPath={catalogImgPath}
-                                    key={item.code}
-                                />
-                            );
+                            return <CatalogItem item={item} key={item.code} />;
                         }}
                         className={cl.catalog__items}
                     />

@@ -312,7 +312,7 @@ const Catalog = () => {
                                     className={cl.btn}
                                     onClick={clearFilters}
                                 >
-                                    <img src="/images/trash.svg" />
+                                    <img src="images/trash.svg" />
                                 </button>
                             </div>
                         </div>

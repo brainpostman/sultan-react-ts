@@ -62,7 +62,7 @@ const Cart = () => {
                                     onClick={() => setShowModal(false)}
                                 ></div>
                                 <div className={cl.modalcheck}>
-                                    <img src="/images/double-check.svg" />
+                                    <img src="images/double-check.svg" />
                                 </div>
                                 <h3>СПАСИБО ЗА ЗАКАЗ</h3>
                                 <p>

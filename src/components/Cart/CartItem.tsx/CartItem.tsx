@@ -67,9 +67,9 @@ const CartItem = ({ item }: CatalogItemProps) => {
             <div className={cl.item__info}>
                 <p className={cl.item__unit}>
                     {item.unit === 'мл' ? (
-                        <img src="/images/whh_bottle.svg" />
+                        <img src="images/whh_bottle.svg" />
                     ) : (
-                        <img src="/images/fa-solid_box-open.svg" />
+                        <img src="images/fa-solid_box-open.svg" />
                     )}
                     <span>
                         {item.amount} {item.unit}
@@ -129,7 +129,7 @@ const CartItem = ({ item }: CatalogItemProps) => {
                         className={`${cl.item__deletebtn} ${cl.btn}`}
                         onClick={handleRemoveItem}
                     >
-                        <img src="/images/trash.svg" alt="Удалить" />
+                        <img src="images/trash.svg" alt="Удалить" />
                     </button>
                 </div>
             </div>

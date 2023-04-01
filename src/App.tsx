@@ -11,7 +11,7 @@ import Admin from './components/Admin/Admin';
 function App() {
     return (
         <div className="wrapper">
-            <BrowserRouter>
+            <BrowserRouter basename="sultan-react-ts">
                 <ScrollToTop />
                 <Header />
                 <Routes>

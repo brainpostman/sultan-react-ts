@@ -12,7 +12,7 @@ export default function Header() {
                     <div className={cl.contacts}>
                         <div className={cl.contact}>
                             <div className={cl.contact__icon}>
-                                <img src="/images/header/location.svg" alt="" />
+                                <img src="images/header/location.svg" alt="" />
                             </div>
                             <div className={cl.contact__info}>
                                 <a href="">г. Кокчетав, ул. Ж. Ташенова 129Б</a>
@@ -21,7 +21,7 @@ export default function Header() {
                         </div>
                         <div className={cl.contact}>
                             <div className={cl.contact__icon}>
-                                <img src="/images/header/mail.svg" alt="" />
+                                <img src="images/header/mail.svg" alt="" />
                             </div>
                             <div className={cl.contact__info}>
                                 <a href="">opt.sultan@mail.ru</a>
@@ -53,7 +53,7 @@ export default function Header() {
                         <Link to="admin">
                             <div className={cl.companyLogo}>
                                 <img
-                                    src="/images/header/sultan-logo.svg"
+                                    src="images/header/sultan-logo.svg"
                                     alt="СУЛТАН"
                                 />
                             </div>
@@ -62,7 +62,7 @@ export default function Header() {
                             <button className={cl.btn}>
                                 Каталог
                                 <img
-                                    src="/images/header/catalog-squares.svg"
+                                    src="images/header/catalog-squares.svg"
                                     alt=""
                                 />
                             </button>
@@ -70,7 +70,7 @@ export default function Header() {
                         <div className={`${cl.input} ${cl.search}`}>
                             <input type="text" placeholder="Поиск..." />
                             <button>
-                                <img src="/images/header/search.svg" alt="" />
+                                <img src="images/header/search.svg" alt="" />
                             </button>
                         </div>
                     </li>
@@ -82,20 +82,20 @@ export default function Header() {
                                 <a href="">Заказать звонок</a>
                             </div>
                             <div className={cl.callcenter__image}>
-                                <img src="/images/header/operator.svg" alt="" />
+                                <img src="images/header/operator.svg" alt="" />
                                 <div className={cl.callcenter__status}></div>
                             </div>
                         </div>
                         <div className={cl.pricelist}>
                             <button className={cl.btn}>
                                 Прайс-лист
-                                <img src="/images/header/download.svg" alt="" />
+                                <img src="images/header/download.svg" alt="" />
                             </button>
                         </div>
                         <Link to="cart">
                             <div className={cl.cart}>
                                 <div className={cl.cart__icon}>
-                                    <img src="/images/header/cart.svg" alt="" />
+                                    <img src="images/header/cart.svg" alt="" />
                                     <div className={cl.cart__items}>
                                         {quantity > 99 ? 99 : quantity}
                                     </div>

@@ -268,7 +268,7 @@ const Admin = () => {
                                             />
                                             <button>
                                                 <img
-                                                    src="/images/header/search.svg"
+                                                    src="images/header/search.svg"
                                                     alt="Поиск"
                                                 />
                                             </button>
@@ -336,7 +336,7 @@ const Admin = () => {
                             onClick={() => setShowSaveModal(false)}
                         ></div>
                         <div className={cl.modalcheck}>
-                            <img src="/images/double-check.svg" />
+                            <img src="images/double-check.svg" />
                         </div>
                         <h3>ИЗМЕНЕНИЯ СОХРАНЕНЫ</h3>
                     </div>

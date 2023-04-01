@@ -87,7 +87,7 @@ const CatalogItem = ({
                     className={`${cl.btn} ${cl.delete}`}
                     onClick={() => handleDelete(item.code)}
                 >
-                    <img src="/images/trash.svg" alt="Удалить" />
+                    <img src="images/trash.svg" alt="Удалить" />
                 </button>
                 <button
                     className={`${cl.btn} ${cl.redact}`}

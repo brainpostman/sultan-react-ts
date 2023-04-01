@@ -32,9 +32,9 @@ const CatalogItem = ({ item }: CatalogItemProps) => {
             />
             <p className={cl.item__quantity}>
                 {item.unit === 'мл' ? (
-                    <img src="/images/whh_bottle.svg" />
+                    <img src="images/whh_bottle.svg" />
                 ) : (
-                    <img src="/images/fa-solid_box-open.svg" />
+                    <img src="images/fa-solid_box-open.svg" />
                 )}
                 <span>
                     {item.amount} {item.unit}

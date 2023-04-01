@@ -1,6 +1,6 @@
 [
     {
-        "img": "/images/catalog/A0000626419.jpg",
+        "img": "images/catalog/A0000626419.jpg",
         "name": "Крем-гель для душа Глубокое питание и увлажнение",
         "unit": "мл",
         "amount": 250,
@@ -24,7 +24,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000006879.jpg",
+        "img": "images/catalog/A0000006879.jpg",
         "name": "Гель для душа Перезагрузка",
         "unit": "мл",
         "amount": 250,
@@ -48,7 +48,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000653135.jpg",
+        "img": "images/catalog/A0000653135.jpg",
         "name": "Скраб для тела Массажный биоэффект Кедрово-ягодный",
         "unit": "мл",
         "amount": 300,
@@ -72,7 +72,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000003490.jpg",
+        "img": "images/catalog/A0000003490.jpg",
         "name": "Крем для рук Ромашково-глицериновый",
         "unit": "мл",
         "amount": 50,
@@ -96,7 +96,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000694055.jpg",
+        "img": "images/catalog/A0000694055.jpg",
         "name": "Крем для рук Питательный",
         "unit": "мл",
         "amount": 80,
@@ -120,7 +120,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000672900.jpg",
+        "img": "images/catalog/A0000672900.jpg",
         "name": "Крем для рук Увлажняющий",
         "unit": "мл",
         "amount": 75,
@@ -144,7 +144,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000009525.jpg",
+        "img": "images/catalog/A0000009525.jpg",
         "name": "Крем для ног Питательный Лимон, пшеница и оливковое масло",
         "unit": "мл",
         "amount": 75,
@@ -168,7 +168,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000010325.jpg",
+        "img": "images/catalog/A0000010325.jpg",
         "name": "Крем для ног Морковный с мятой",
         "unit": "мл",
         "amount": 75,
@@ -192,7 +192,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000655886.jpg",
+        "img": "images/catalog/A0000655886.jpg",
         "name": "Масло для ног густое",
         "unit": "мл",
         "amount": 120,
@@ -216,7 +216,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000639956.jpg",
+        "img": "images/catalog/A0000639956.jpg",
         "name": "Маска для лица Дегтярная Очищающая",
         "unit": "мл",
         "amount": 100,
@@ -240,7 +240,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000718833.jpg",
+        "img": "images/catalog/A0000718833.jpg",
         "name": "Bio-тоник для лица Стимулятор молодости",
         "unit": "мл",
         "amount": 300,
@@ -264,7 +264,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000012340.jpg",
+        "img": "images/catalog/A0000012340.jpg",
         "name": "Крем для лица Ромашка для сухой и нормальной кожи",
         "unit": "мл",
         "amount": 40,
@@ -288,7 +288,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000632588.jpg",
+        "img": "images/catalog/A0000632588.jpg",
         "name": "Бальзам для волос Hair Therapy Питающий уход",
         "unit": "мл",
         "amount": 200,
@@ -312,7 +312,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000644057.jpg",
+        "img": "images/catalog/A0000644057.jpg",
         "name": "Шампунь для волос SOS Восстановление",
         "unit": "мл",
         "amount": 250,
@@ -336,7 +336,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000657451.jpg",
+        "img": "images/catalog/A0000657451.jpg",
         "name": "Маска для волос Обертывание Облепиховое Блеск и сияние",
         "unit": "мл",
         "amount": 300,
@@ -360,7 +360,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000222914.jpg",
+        "img": "images/catalog/A0000222914.jpg",
         "name": "Крем для лица солнцезащитный SPF50+ (увлажняющий)",
         "unit": "г",
         "amount": 30,
@@ -384,7 +384,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000125475.jpg",
+        "img": "images/catalog/A0000125475.jpg",
         "name": "Эмульсия для тела солнцезащитная водостойкая SPF50",
         "unit": "мл",
         "amount": 150,
@@ -408,7 +408,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000149359.jpg",
+        "img": "images/catalog/A0000149359.jpg",
         "name": "Жидкие колготки",
         "unit": "мл",
         "amount": 75,
@@ -432,7 +432,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000016318.jpg",
+        "img": "images/catalog/A0000016318.jpg",
         "name": "Пена для бритья Hemp",
         "unit": "мл",
         "amount": 200,
@@ -456,7 +456,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000670497.jpg",
+        "img": "images/catalog/A0000670497.jpg",
         "name": "Крем после депиляции Шелковый",
         "unit": "мл",
         "amount": 80,
@@ -480,7 +480,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000628131.jpg",
+        "img": "images/catalog/A0000628131.jpg",
         "name": "Лезвия Rubie Платинум Плюс",
         "unit": "шт",
         "amount": 5,
@@ -504,7 +504,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000655414.jpg",
+        "img": "images/catalog/A0000655414.jpg",
         "name": "Ватные диски Visage",
         "unit": "шт",
         "amount": 150,
@@ -528,7 +528,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000722426.jpg",
+        "img": "images/catalog/A0000722426.jpg",
         "name": "Ватные палочки Visage (в пакете)",
         "unit": "шт",
         "amount": 300,
@@ -552,7 +552,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000643845.jpg",
+        "img": "images/catalog/A0000643845.jpg",
         "name": "Влажные салфетки Ecoline Ромашка",
         "unit": "шт",
         "amount": 15,
@@ -576,7 +576,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000003419.jpg",
+        "img": "images/catalog/A0000003419.jpg",
         "name": "Зубная паста Максимальная защита от кариеса Свежая мята",
         "unit": "мл",
         "amount": 100,
@@ -600,7 +600,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000628066.jpg",
+        "img": "images/catalog/A0000628066.jpg",
         "name": "Зубная щетка Классика здоровья мягкая",
         "unit": "шт",
         "amount": 1,
@@ -624,7 +624,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000013166.jpg",
+        "img": "images/catalog/A0000013166.jpg",
         "name": "Ополаскиватель для полости рта Plax Освежающая Мята",
         "unit": "мл",
         "amount": 250,
@@ -648,7 +648,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000722387.jpg",
+        "img": "images/catalog/A0000722387.jpg",
         "name": "Бумажные полотенца V-сложение натурального цвета однослойные 23х23 см",
         "unit": "шт",
         "amount": 250,
@@ -672,7 +672,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000010033.jpg",
+        "img": "images/catalog/A0000010033.jpg",
         "name": "Носовые платочки Ecoline двухслойные 20 х 20 см",
         "unit": "шт",
         "amount": 10,
@@ -696,7 +696,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000722385.jpg",
+        "img": "images/catalog/A0000722385.jpg",
         "name": "Туалетная бумага с втулкой",
         "unit": "шт",
         "amount": 1,
@@ -720,7 +720,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000016255.jpg",
+        "img": "images/catalog/A0000016255.jpg",
         "name": "Гель для душа 3 в 1 БЕДОВЫЙ АПЕЛЬСИН",
         "unit": "шт",
         "amount": 1,
@@ -744,7 +744,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000019884.jpg",
+        "img": "images/catalog/A0000019884.jpg",
         "name": "Набор тканевых масок против морщин с секретом улитки для лица",
         "unit": "шт",
         "amount": 5,
@@ -768,7 +768,7 @@
         }
     },
     {
-        "img": "/images/catalog/A0000000020.jpg",
+        "img": "images/catalog/A0000000020.jpg",
         "name": "Подарочный набор мужской MY LAND",
         "unit": "шт",
         "amount": 1,

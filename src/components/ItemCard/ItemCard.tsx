@@ -111,9 +111,9 @@ const ItemCard = () => {
                         </h2>
                         <p className={cl.unit}>
                             {item.unit === 'мл' ? (
-                                <img src="/images/whh_bottle.svg" />
+                                <img src="images/whh_bottle.svg" />
                             ) : (
-                                <img src="/images/fa-solid_box-open.svg" />
+                                <img src="images/fa-solid_box-open.svg" />
                             )}
                             <span>
                                 {item.amount} {item.unit}
@@ -163,14 +163,13 @@ const ItemCard = () => {
                                 className={`${cl.btn} ${cl.buy}`}
                                 onClick={handleAddItem}
                             >
-                                В КОРЗИНУ{' '}
-                                <img src="/images/basket.svg" alt="" />
+                                В КОРЗИНУ <img src="images/basket.svg" alt="" />
                             </button>
                         </div>
                         <div className={cl.buttons}>
                             <div className={cl.share}>
                                 <img
-                                    src="/images/ci_share.svg"
+                                    src="images/ci_share.svg"
                                     alt="Поделиться"
                                 />
                             </div>
@@ -182,7 +181,7 @@ const ItemCard = () => {
                             </div>
                             <button className={cl.pricelist}>
                                 Прайс-лист
-                                <img src="/images/download-gray.svg" />
+                                <img src="images/download-gray.svg" />
                             </button>
                         </div>
                         <div className={cl.info}>

@@ -1,7 +1,6 @@
 @import "./reset";
 @import "./commons";
 
-
 * {
     font-family: $inter;
     color: $color_black;
@@ -24,4 +23,3 @@ body {
     flex-direction: column;
     min-height: 100%;
 }
-

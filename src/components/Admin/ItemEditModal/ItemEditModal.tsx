@@ -38,7 +38,7 @@ const ItemEditModal = ({
         String(Math.trunc(item.price))
     );
     const [priceDecInput, setPriceDecInput] = useState(
-        String(item.price).split('.')[1]
+        String(item.price).split('.')[1] || '0'
     );
     const [codeInput, setCodeInput] = useState(item.code);
 

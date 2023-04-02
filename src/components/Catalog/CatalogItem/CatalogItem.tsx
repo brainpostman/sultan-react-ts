@@ -42,11 +42,7 @@ const CatalogItem = ({ item }: CatalogItemProps) => {
             </p>
             <Link to={`${item.code}`}>
                 <h5 className={cl.item__title}>
-                    <span>{item.brand}</span>{' '}
-                    {item.brand.length + item.name.length < 45
-                        ? item.name
-                        : item.name.slice(0, 45 - item.brand.length).trimEnd() +
-                          '...'}
+                    <span>{item.brand}</span> {item.name}
                 </h5>
             </Link>
             <div className={cl.item__info}>

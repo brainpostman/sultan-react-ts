@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import useCareFilter from '../../hooks/useCareFilter';
 import useCareState from '../../hooks/useCareState';
 import useMnfctState from '../../hooks/useMnfctState';
@@ -19,10 +19,73 @@ import CareFilter from './CareFilter';
 import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useNavigate } from 'react-router-dom';
+import Back from '../UI/Back/Back';
 
 const Catalog = () => {
     //получение каталога из store (а там из localStorage)
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
+    const navigate = useNavigate();
+
+    const [itemsPerPage, setItemsPerPage] = useState(9);
+    const [mobile, setMobile] = useState(false);
+    const [filtersDropdown, setFiltersDropdown] = useState(false);
+
+    const filterDropdownClass = filtersDropdown
+        ? cl.filterDropdown
+        : `${cl.filterDropdown} ${cl.filterDropdownActive}`;
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(max-width: 1415px)');
+        const mediaQueryList2 = window.matchMedia('(max-width: 1024px)');
+        const mediaQueryList3 = window.matchMedia('(max-width: 615px)');
+        handleWindowResize3();
+        function handleWindowResize1() {
+            if (mediaQueryList.matches) {
+                setItemsPerPage(10);
+            } else {
+                setItemsPerPage(9);
+            }
+        }
+        function handleWindowResize2() {
+            if (mediaQueryList2.matches) {
+                setItemsPerPage(5);
+            } else {
+                handleWindowResize1();
+            }
+        }
+        function handleWindowResize3() {
+            if (mediaQueryList3.matches) {
+                setItemsPerPage(15);
+            } else {
+                handleWindowResize2();
+            }
+        }
+        mediaQueryList.addEventListener('change', handleWindowResize1);
+        mediaQueryList2.addEventListener('change', handleWindowResize2);
+        mediaQueryList3.addEventListener('change', handleWindowResize3);
+        return () => {
+            mediaQueryList.removeEventListener('change', handleWindowResize1);
+            mediaQueryList2.removeEventListener('change', handleWindowResize2);
+            mediaQueryList3.removeEventListener('change', handleWindowResize3);
+        };
+    }, []);
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(max-width: 615px)');
+        handleWindowResize();
+        function handleWindowResize() {
+            if (mediaQueryList.matches) {
+                setMobile(true);
+            } else {
+                setMobile(false);
+            }
+        }
+        mediaQueryList.addEventListener('change', handleWindowResize);
+        return () => {
+            mediaQueryList.removeEventListener('change', handleWindowResize);
+        };
+    });
 
     const catalogArr = useMemo(() => {
         return Array.from(catalogItems.values());
@@ -57,18 +120,16 @@ const Catalog = () => {
     const [selectedSort, setSelectedSort] = useState('price');
     const [sortDirection, setSortDirection] = useState('ascend');
 
-    //расширяющееся меню производителей
-    const [mnfctDropdown, setMnfctDropdown] = useState(false);
-    let mnfctListClasses = `${cl.mnfct__list} ${
-        mnfctDropdown ? cl.mnfct__dropdown : ''
-    }`;
-
     //фильтр списка производителей
     const filteredMnfctrs = useMemo(() => {
         return Array.from(manufacturers.values()).filter((mnfct) =>
             mnfct.name.toLowerCase().includes(mnfctQuery.toLowerCase())
         );
     }, [mnfctQuery, manufacturers]);
+
+    //расширяющееся меню производителей
+    const [mnfctDropdown, setMnfctDropdown] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     //управление компонентами промежутка цен
     const handleMinPriceBlur = () => {
@@ -154,32 +215,38 @@ const Catalog = () => {
     return (
         <main className={cl.catalog}>
             <div className={cl.catalog__container}>
-                <Breadcrumbs>
-                    <span>Каталог</span>
-                </Breadcrumbs>
+                {mobile ? (
+                    <Back className={cl.back} />
+                ) : (
+                    <Breadcrumbs>
+                        <span>Каталог</span>
+                    </Breadcrumbs>
+                )}
                 <section className={cl.catalog__titleAndSort}>
                     <h2 className={cl.title}>КАТАЛОГ</h2>
-                    <div className={cl.sort}>
-                        Сортировка:
-                        <Select
-                            value={selectedSort}
-                            onChange={(sort) => setSelectedSort(sort)}
-                            options={[
-                                { value: 'price', name: 'Цена' },
-                                { value: 'name', name: 'Название' },
-                            ]}
-                            className={cl.select}
-                        />
-                        <Select
-                            value={sortDirection}
-                            onChange={(sort) => setSortDirection(sort)}
-                            options={[
-                                { value: 'ascend', name: 'По возрастанию' },
-                                { value: 'descend', name: 'По убыванию' },
-                            ]}
-                            className={cl.select}
-                        />
-                    </div>
+                    {!mobile && (
+                        <div className={cl.sort}>
+                            Сортировка:
+                            <Select
+                                value={selectedSort}
+                                onChange={(sort) => setSelectedSort(sort)}
+                                options={[
+                                    { value: 'price', name: 'Цена' },
+                                    { value: 'name', name: 'Название' },
+                                ]}
+                                className={cl.select}
+                            />
+                            <Select
+                                value={sortDirection}
+                                onChange={(sort) => setSortDirection(sort)}
+                                options={[
+                                    { value: 'ascend', name: 'По возрастанию' },
+                                    { value: 'descend', name: 'По убыванию' },
+                                ]}
+                                className={cl.select}
+                            />
+                        </div>
+                    )}
                     <List
                         items={Array.from(careFilters.values())}
                         renderItem={(item: ICareFilter) => {
@@ -199,16 +266,22 @@ const Catalog = () => {
                 <section className={cl.catalog__itemsAndFilters}>
                     <div className={cl.filters}>
                         <h5 className={cl.filters__title}>
-                            ПОДБОР ПО ПАРАМЕТРАМ
+                            ПОДБОР ПО ПАРАМЕТРАМ{' '}
+                            {mobile && (
+                                <div
+                                    className={`${cl.filterDropdown} ${cl.filterDropdownActive}`}
+                                >
+                                    <div></div>
+                                </div>
+                            )}
                         </h5>
                         <div className={cl.filters__price}>
-                            <label htmlFor="price">
+                            <label>
                                 Цена <strong>₸</strong>
                             </label>
                             <div className={cl.price__inputs}>
                                 <input
                                     type="number"
-                                    name="price"
                                     min={0}
                                     max={9999999}
                                     value={minPrice}
@@ -228,9 +301,7 @@ const Catalog = () => {
                             </div>
                         </div>
                         <div className={cl.filters__mnfct}>
-                            <label className={cl.mnfct__title} htmlFor="mnfct">
-                                Производитель
-                            </label>
+                            <label>Производитель</label>
                             <div className={`${cl.search} ${cl.input}`}>
                                 <input
                                     type="text"
@@ -247,28 +318,39 @@ const Catalog = () => {
                                     />
                                 </button>
                             </div>
-                            <List
-                                items={filteredMnfctrs}
-                                renderItem={(item: IManufacturerInfo) => {
-                                    return (
-                                        <Checkbox
-                                            item={item}
-                                            onChange={updateMnfctFlags}
-                                            checked={item.checked}
-                                            key={item.name}
-                                            className={cl.mnfct__item}
-                                        >
-                                            {item.name}
-                                            <span>{`(${item.amount})`}</span>
-                                        </Checkbox>
-                                    );
-                                }}
-                                className={mnfctListClasses}
-                            />
+                            <div className={cl.mnfct__list} ref={dropdownRef}>
+                                <List
+                                    items={filteredMnfctrs}
+                                    renderItem={(item: IManufacturerInfo) => {
+                                        return (
+                                            <Checkbox
+                                                item={item}
+                                                onChange={updateMnfctFlags}
+                                                checked={item.checked}
+                                                key={item.name}
+                                                className={cl.mnfct__item}
+                                            >
+                                                {item.name}
+                                                <span>{`(${item.amount})`}</span>
+                                            </Checkbox>
+                                        );
+                                    }}
+                                />
+                            </div>
                             <button
                                 className={cl.showAll}
                                 onClick={() => {
                                     setMnfctDropdown((prevValue) => {
+                                        if (dropdownRef.current) {
+                                            if (!prevValue) {
+                                                dropdownRef.current.style.height = `${
+                                                    filteredMnfctrs.length * 21
+                                                }px`;
+                                            } else {
+                                                dropdownRef.current.style.height =
+                                                    '84px';
+                                            }
+                                        }
                                         return !prevValue;
                                     });
                                 }}
@@ -332,9 +414,32 @@ const Catalog = () => {
                             className={cl.careTypeLeft}
                         />
                     </div>
+                    {mobile && (
+                        <div className={cl.sort}>
+                            Сортировка:
+                            <Select
+                                value={selectedSort}
+                                onChange={(sort) => setSelectedSort(sort)}
+                                options={[
+                                    { value: 'price', name: 'Цена' },
+                                    { value: 'name', name: 'Название' },
+                                ]}
+                                className={cl.select}
+                            />
+                            <Select
+                                value={sortDirection}
+                                onChange={(sort) => setSortDirection(sort)}
+                                options={[
+                                    { value: 'ascend', name: 'По возрастанию' },
+                                    { value: 'descend', name: 'По убыванию' },
+                                ]}
+                                className={cl.select}
+                            />
+                        </div>
+                    )}
                     <Pagination
                         items={filteredByNamePrice}
-                        itemsPerPage={9}
+                        itemsPerPage={itemsPerPage}
                         renderItem={(item: ICatalogItem) => {
                             return <CatalogItem item={item} key={item.code} />;
                         }}

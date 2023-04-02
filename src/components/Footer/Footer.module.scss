@@ -8,7 +8,14 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        flex-wrap: wrap;
         padding: 71px 0 116px 0;
+    }
+
+    & nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     & h4 {
@@ -24,7 +31,6 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
-        gap: 20px;
     }
 
     & li {
@@ -32,11 +38,22 @@
         font-weight: 400px;
         font-size: 14px;
         line-height: 1.5;
+        margin-bottom: 20px;
+        &:last-of-type {
+            margin-bottom: 0;
+        }
     }
 }
 
 .subscription {
     flex: 0 1 320px;
+
+    &__toprow {
+        & button {
+            display: none;
+        }
+    }
+
     & p {
         color: #fff;
         font-weight: 400;
@@ -86,6 +103,8 @@
 }
 
 .info {
+    display: flex;
+    flex-direction: column;
     & p {
         color: inherit;
         font-weight: inherit;
@@ -102,6 +121,9 @@
 nav li {
     &:hover {
         text-decoration: underline;
+    }
+    &:first-of-type {
+        margin-bottom: 0;
     }
 }
 
@@ -153,5 +175,110 @@ nav li {
         & img:first-of-type {
             margin-right: 10px;
         }
+    }
+}
+
+@media (max-width: 1199px) {
+    .footer__container {
+        justify-content: center;
+        gap: 20px;
+        padding: 40px 0;
+    }
+    .subscription {
+        flex: 0 0 25%;
+    }
+    nav:first-of-type {
+        flex: 0 0 25%;
+    }
+
+    nav:last-of-type {
+        flex: 0 0 25%;
+    }
+    .info {
+        flex: 1 0 30%;
+        align-items: flex-end;
+    }
+    .contacts {
+        flex: 1 0 30%;
+        margin-left: 100px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .footer__container {
+        width: 90.625%;
+        justify-content: flex-start;
+        gap: 0;
+    }
+    .subscription {
+        flex: 0 0 100%;
+        padding-bottom: 30px;
+    }
+    nav:first-of-type {
+        flex: 0 0 50%;
+        align-items: flex-start;
+    }
+
+    nav:last-of-type {
+        flex: 0 0 50%;
+        padding-bottom: 30px;
+        align-items: flex-start;
+    }
+    .info {
+        flex: 0 0 50%;
+        align-items: flex-start;
+        order: 5;
+    }
+    .contacts {
+        flex: 0 0 50%;
+        margin-left: 0;
+        order: 4;
+    }
+}
+
+@media (max-width: 462px) {
+    .subscription {
+        &__logo {
+            width: 92px;
+            & img {
+                width: 100%;
+            }
+        }
+
+        &__toprow {
+            display: flex;
+            justify-content: space-between;
+            & button {
+                display: block;
+                width: 150px;
+                height: 40px;
+                font-weight: 700;
+                font-size: 12px;
+                line-height: 15px;
+                & img {
+                    height: 12px;
+                    vertical-align: middle;
+                    margin-left: 7px;
+                }
+            }
+        }
+    }
+    .info {
+        flex: 0 0 20%;
+        align-self: center;
+        & h4 {
+            display: none;
+        }
+        & li:first-of-type {
+            display: none;
+        }
+    }
+
+    .contacts {
+        flex: 0 0 60%;
+    }
+
+    nav li a {
+        font-size: 12px;
     }
 }

@@ -1,0 +1,42 @@
+@import '/src/styles/commons';
+
+.goback {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    &__icon {
+        position: relative;
+        @include center-content;
+        height: 32px;
+        width: 32px;
+        background-color: rgba(255, 202, 101, 0.3);
+        border-radius: 50%;
+        & div {
+            position: absolute;
+            flex-shrink: 0;
+            height: 8px;
+            width: 8px;
+            border-top: 1px solid $color_gray;
+            border-left: 1px solid $color_gray;
+            transform: rotate(-45deg);
+            left: 14px;
+        }
+    }
+    &__text {
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 1.2;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: $color_gray;
+    }
+    &:hover {
+        &__text {
+            text-decoration: underline;
+        }
+        &__icon {
+            background-color: rgba(255, 202, 101, 0.5);
+        }
+    }
+}

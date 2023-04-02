@@ -5,8 +5,14 @@ export default function Footer() {
         <footer className={cl.footer}>
             <div className={cl.footer__container}>
                 <div className={cl.subscription}>
-                    <div className={cl.subscription__logo}>
-                        <img src="images/footer/sultan.svg" alt="СУЛТАН" />
+                    <div className={cl.subscription__toprow}>
+                        <div className={cl.subscription__logo}>
+                            <img src="images/footer/sultan.svg" alt="СУЛТАН" />
+                        </div>
+                        <button className={cl.btn}>
+                            Прайс-лист
+                            <img src="images/header/download.svg" alt="" />
+                        </button>
                     </div>
                     <p>
                         Компания «Султан» — снабжаем розничные магазины товарами
@@ -31,8 +37,10 @@ export default function Footer() {
                     </form>
                 </div>
                 <nav>
-                    <h4>Меню сайта:</h4>
                     <ul>
+                        <li>
+                            <h4>Меню сайта:</h4>
+                        </li>
                         <li>
                             <a href="">О компании</a>
                         </li>
@@ -48,8 +56,11 @@ export default function Footer() {
                     </ul>
                 </nav>
                 <nav>
-                    <h4>Категории:</h4>
                     <ul>
+                        <li>
+                            {' '}
+                            <h4>Категории:</h4>
+                        </li>
                         <li>
                             <a href="">Бытовая химия</a>
                         </li>
@@ -78,6 +89,8 @@ export default function Footer() {
                         </li>
                         <li className={cl.info__messengers}>
                             <p>Связь в мессенджерах:</p>
+                        </li>
+                        <li className={cl.info__messengers}>
                             <a href="">
                                 <img
                                     src="images/footer/whatsapp.svg"

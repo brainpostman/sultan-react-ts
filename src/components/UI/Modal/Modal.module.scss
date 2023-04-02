@@ -1,7 +1,7 @@
 @import 'src/styles/commons';
 
 .modalbackground {
-    z-index: 999;
+    z-index: 9999;
     @include center-content;
     position: fixed;
     top: 0;

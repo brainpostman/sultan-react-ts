@@ -80,9 +80,7 @@
 }
 
 .modalcheck {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include center-content;
     border-radius: 9999px;
     background-color: $color_orange;
     width: 60px;

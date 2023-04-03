@@ -19,21 +19,57 @@ import CareFilter from './CareFilter';
 import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { useNavigate } from 'react-router-dom';
 import Back from '../UI/Back/Back';
 
 const Catalog = () => {
     //получение каталога из store (а там из localStorage)
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
-    const navigate = useNavigate();
 
     const [itemsPerPage, setItemsPerPage] = useState(9);
     const [mobile, setMobile] = useState(false);
+
+    //расширяющееся меню производителей
+    const [mnfctDropdown, setMnfctDropdown] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    function handleMnfctDropdown() {
+        setMnfctDropdown((prevValue) => {
+            if (dropdownRef.current) {
+                if (!prevValue) {
+                    dropdownRef.current.style.height = `${
+                        filteredMnfctrs.length * 21
+                    }px`;
+                } else {
+                    dropdownRef.current.style.height = '84px';
+                }
+            }
+            return !prevValue;
+        });
+    }
+
     const [filtersDropdown, setFiltersDropdown] = useState(false);
+    const filtersDropdownRef = useRef<HTMLDivElement>(null);
 
     const filterDropdownClass = filtersDropdown
-        ? cl.filterDropdown
-        : `${cl.filterDropdown} ${cl.filterDropdownActive}`;
+        ? `${cl.filterDropdown} ${cl.filterDropdownActive}`
+        : cl.filterDropdown;
+
+    function handleFilterDropdown() {
+        setFiltersDropdown((prevValue) => {
+            if (dropdownRef.current && mnfctDropdown) {
+                dropdownRef.current.style.height = '84px';
+                setMnfctDropdown(false);
+            }
+            if (filtersDropdownRef.current) {
+                if (!prevValue) {
+                    filtersDropdownRef.current.style.height = '846px';
+                } else {
+                    filtersDropdownRef.current.style.height = '0';
+                }
+            }
+            return !prevValue;
+        });
+    }
 
     useEffect(() => {
         const mediaQueryList = window.matchMedia('(max-width: 1415px)');
@@ -85,7 +121,7 @@ const Catalog = () => {
         return () => {
             mediaQueryList.removeEventListener('change', handleWindowResize);
         };
-    });
+    }, []);
 
     const catalogArr = useMemo(() => {
         return Array.from(catalogItems.values());
@@ -126,10 +162,6 @@ const Catalog = () => {
             mnfct.name.toLowerCase().includes(mnfctQuery.toLowerCase())
         );
     }, [mnfctQuery, manufacturers]);
-
-    //расширяющееся меню производителей
-    const [mnfctDropdown, setMnfctDropdown] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
 
     //управление компонентами промежутка цен
     const handleMinPriceBlur = () => {
@@ -269,154 +301,165 @@ const Catalog = () => {
                             ПОДБОР ПО ПАРАМЕТРАМ{' '}
                             {mobile && (
                                 <div
-                                    className={`${cl.filterDropdown} ${cl.filterDropdownActive}`}
+                                    className={filterDropdownClass}
+                                    onClick={handleFilterDropdown}
                                 >
                                     <div></div>
                                 </div>
                             )}
                         </h5>
-                        <div className={cl.filters__price}>
-                            <label>
-                                Цена <strong>₸</strong>
-                            </label>
-                            <div className={cl.price__inputs}>
-                                <input
-                                    type="number"
-                                    min={0}
-                                    max={9999999}
-                                    value={minPrice}
-                                    onChange={handleMinPriceChange}
-                                    onBlur={handleMinPriceBlur}
-                                />{' '}
-                                -
-                                <input
-                                    type="number"
-                                    name="price"
-                                    min={1}
-                                    max={9999999}
-                                    value={maxPrice}
-                                    onChange={handleMaxPriceChange}
-                                    onBlur={handleMaxPriceBlur}
-                                />
-                            </div>
-                        </div>
-                        <div className={cl.filters__mnfct}>
-                            <label>Производитель</label>
-                            <div className={`${cl.search} ${cl.input}`}>
-                                <input
-                                    type="text"
-                                    placeholder="Поиск..."
-                                    value={mnfctQuery}
-                                    onChange={(e) =>
-                                        setMnfctQuery(e.target.value)
-                                    }
-                                />
-                                <button>
-                                    <img
-                                        src="images/header/search.svg"
-                                        alt="Поиск"
+                        <div
+                            className={cl.filters__container}
+                            ref={filtersDropdownRef}
+                        >
+                            <div className={cl.filters__price}>
+                                <label>
+                                    Цена <strong>₸</strong>
+                                </label>
+                                <div className={cl.price__inputs}>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={9999999}
+                                        value={minPrice}
+                                        onChange={handleMinPriceChange}
+                                        onBlur={handleMinPriceBlur}
+                                    />{' '}
+                                    -
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        min={1}
+                                        max={9999999}
+                                        value={maxPrice}
+                                        onChange={handleMaxPriceChange}
+                                        onBlur={handleMaxPriceBlur}
                                     />
-                                </button>
+                                </div>
                             </div>
-                            <div className={cl.mnfct__list} ref={dropdownRef}>
-                                <List
-                                    items={filteredMnfctrs}
-                                    renderItem={(item: IManufacturerInfo) => {
-                                        return (
-                                            <Checkbox
-                                                item={item}
-                                                onChange={updateMnfctFlags}
-                                                checked={item.checked}
-                                                key={item.name}
-                                                className={cl.mnfct__item}
-                                            >
-                                                {item.name}
-                                                <span>{`(${item.amount})`}</span>
-                                            </Checkbox>
-                                        );
-                                    }}
-                                />
-                            </div>
-                            <button
-                                className={cl.showAll}
-                                onClick={() => {
-                                    setMnfctDropdown((prevValue) => {
-                                        if (dropdownRef.current) {
-                                            if (!prevValue) {
-                                                dropdownRef.current.style.height = `${
-                                                    filteredMnfctrs.length * 21
-                                                }px`;
-                                            } else {
-                                                dropdownRef.current.style.height =
-                                                    '84px';
-                                            }
+                            <div className={cl.filters__mnfct}>
+                                <label>Производитель</label>
+                                <div className={`${cl.search} ${cl.input}`}>
+                                    <input
+                                        type="text"
+                                        placeholder="Поиск..."
+                                        value={mnfctQuery}
+                                        onChange={(e) =>
+                                            setMnfctQuery(e.target.value)
                                         }
-                                        return !prevValue;
-                                    });
-                                }}
-                            >
-                                {filteredMnfctrs.length > 4 && (
-                                    <div>
-                                        {mnfctDropdown ? (
-                                            <div
-                                                className={
-                                                    cl.showAll__container
-                                                }
-                                            >
-                                                Скрыть
-                                                <div
-                                                    className={cl.arrow_up}
-                                                ></div>
-                                            </div>
-                                        ) : (
-                                            <div
-                                                className={
-                                                    cl.showAll__container
-                                                }
-                                            >
-                                                Показать все
-                                                <div
-                                                    className={cl.arrow_down}
-                                                ></div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </button>
-                            <div className={cl.filters__applyDelete}>
-                                <button
-                                    className={cl.btn}
-                                    onClick={filterByPriceRangeAndMnfct}
-                                >
-                                    Показать
-                                </button>
-                                <button
-                                    className={cl.btn}
-                                    onClick={clearFilters}
-                                >
-                                    <img src="images/trash.svg" />
-                                </button>
-                            </div>
-                        </div>
-                        <List
-                            items={Array.from(careFilters.values())}
-                            renderItem={(item: ICareFilter) => {
-                                return (
-                                    <CareFilter
-                                        onClick={updateCareFilter}
-                                        filter={item}
-                                        className={cl.careTypeLeft__item}
-                                        key={item.type}
-                                        active={cl.careTypeLeft__item_active}
                                     />
-                                );
-                            }}
-                            className={cl.careTypeLeft}
-                        />
+                                    <button>
+                                        <img
+                                            src="images/header/search.svg"
+                                            alt="Поиск"
+                                        />
+                                    </button>
+                                </div>
+                                <div
+                                    className={cl.mnfct__list}
+                                    ref={dropdownRef}
+                                >
+                                    {filteredMnfctrs.length !== 0 ? (
+                                        <List
+                                            items={filteredMnfctrs}
+                                            renderItem={(
+                                                item: IManufacturerInfo
+                                            ) => {
+                                                return (
+                                                    <Checkbox
+                                                        item={item}
+                                                        onChange={
+                                                            updateMnfctFlags
+                                                        }
+                                                        checked={item.checked}
+                                                        key={item.name}
+                                                        className={
+                                                            cl.mnfct__item
+                                                        }
+                                                    >
+                                                        {item.name}
+                                                        <span>{`(${item.amount})`}</span>
+                                                    </Checkbox>
+                                                );
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className={cl.nomatch_mnfct}>
+                                            Нет совпадений
+                                        </div>
+                                    )}
+                                </div>
+                                <button
+                                    className={cl.showAll}
+                                    onClick={handleMnfctDropdown}
+                                >
+                                    {filteredMnfctrs.length > 4 && (
+                                        <div>
+                                            {mnfctDropdown ? (
+                                                <div
+                                                    className={
+                                                        cl.showAll__container
+                                                    }
+                                                >
+                                                    Скрыть
+                                                    <div
+                                                        className={cl.arrow_up}
+                                                    ></div>
+                                                </div>
+                                            ) : (
+                                                <div
+                                                    className={
+                                                        cl.showAll__container
+                                                    }
+                                                >
+                                                    Показать все
+                                                    <div
+                                                        className={
+                                                            cl.arrow_down
+                                                        }
+                                                    ></div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </button>
+                                <div className={cl.filters__applyDelete}>
+                                    <button
+                                        className={cl.btn}
+                                        onClick={filterByPriceRangeAndMnfct}
+                                    >
+                                        Показать
+                                    </button>
+                                    <button
+                                        className={cl.btn}
+                                        onClick={clearFilters}
+                                    >
+                                        <img src="images/trash.svg" />
+                                    </button>
+                                </div>
+                            </div>
+                            <List
+                                items={Array.from(careFilters.values())}
+                                renderItem={(item: ICareFilter) => {
+                                    return (
+                                        <CareFilter
+                                            onClick={updateCareFilter}
+                                            filter={item}
+                                            className={cl.careTypeLeft__item}
+                                            key={item.type}
+                                            active={
+                                                cl.careTypeLeft__item_active
+                                            }
+                                        />
+                                    );
+                                }}
+                                className={cl.careTypeLeft}
+                            />
+                        </div>
                     </div>
                     {mobile && (
                         <div className={cl.sort}>
-                            Сортировка:
+                            <div className={cl.sort__title}>Сортировка:</div>
                             <Select
                                 value={selectedSort}
                                 onChange={(sort) => setSelectedSort(sort)}
@@ -437,14 +480,20 @@ const Catalog = () => {
                             />
                         </div>
                     )}
-                    <Pagination
-                        items={filteredByNamePrice}
-                        itemsPerPage={itemsPerPage}
-                        renderItem={(item: ICatalogItem) => {
-                            return <CatalogItem item={item} key={item.code} />;
-                        }}
-                        className={cl.catalog__items}
-                    />
+                    {filteredByNamePrice.length !== 0 ? (
+                        <Pagination
+                            items={filteredByNamePrice}
+                            itemsPerPage={itemsPerPage}
+                            renderItem={(item: ICatalogItem) => {
+                                return (
+                                    <CatalogItem item={item} key={item.code} />
+                                );
+                            }}
+                            className={cl.catalog__items}
+                        />
+                    ) : (
+                        <div className={cl.nomatch_shop}>Нет совпадений</div>
+                    )}
                 </section>
             </div>
         </main>

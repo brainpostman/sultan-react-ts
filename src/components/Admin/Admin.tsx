@@ -244,6 +244,7 @@ const Admin = () => {
                         </div>
                         <List
                             items={itemFieldsArr}
+                            className={cl.filtersContainer}
                             renderItem={(item) => {
                                 return (
                                     <div
@@ -277,7 +278,7 @@ const Admin = () => {
                                 );
                             }}
                         />
-                        <div>
+                        <div className={cl.catalogControls}>
                             <button
                                 className={cl.btn}
                                 onClick={() => {

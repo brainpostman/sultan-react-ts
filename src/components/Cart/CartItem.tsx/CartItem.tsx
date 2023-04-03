@@ -95,21 +95,25 @@ const CartItem = ({ item }: CatalogItemProps) => {
                     >
                         -
                     </button>
-                    <label htmlFor="cart-quantity" className={cl.item__incart}>
-                        {editingQuantity ? (
-                            <input
-                                ref={quantityInputRef}
-                                value={inputValue}
-                                type="number"
-                                name="cart-quantity"
-                                id="cart-quantity"
-                                onBlur={handleInputBlur}
-                                onInput={handleInputChange}
-                            />
-                        ) : (
-                            <div onClick={handleInputFocus}>{item.inCart}</div>
-                        )}
-                    </label>
+                    <div className={cl.item__incart}>
+                        <label htmlFor="cart-quantity">
+                            {editingQuantity ? (
+                                <input
+                                    ref={quantityInputRef}
+                                    value={inputValue}
+                                    type="number"
+                                    name="cart-quantity"
+                                    id="cart-quantity"
+                                    onBlur={handleInputBlur}
+                                    onInput={handleInputChange}
+                                />
+                            ) : (
+                                <div onClick={handleInputFocus}>
+                                    {item.inCart}
+                                </div>
+                            )}
+                        </label>
+                    </div>
                     <button
                         className={cl.item__changeAmount}
                         onClick={handleIncrementItem}

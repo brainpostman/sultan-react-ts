@@ -1,3 +1,5 @@
+@import 'src/styles/commons';
+
 .redactForm {
     display: flex;
     flex-direction: column;
@@ -12,10 +14,17 @@
         font-size: 12px;
         line-height: 1.2;
         text-align: center;
+        vertical-align: top;
+        text-align: left;
+    }
+    & input {
+        width: 600px;
     }
     & input, & textarea {
         margin-left: 5px;
         width: 500px;
+        border: 1px solid black;
+        padding: 2px;
     }
     & input[type="number"] {
         -moz-appearance: textfield;
@@ -25,4 +34,49 @@
             margin: 0;
         }
     }
+
+    & textarea {
+        height: 150px;
+    }
 }
+
+.descr {
+    display: flex;
+    align-items: flex-start;
+    & textarea {
+        width: 600px;
+    }
+}
+
+.price {
+    & input {
+        width: 75px;
+    }
+}
+
+.careTypes {
+    columns: 3;
+    &__item {
+        width: 100%;
+        & input {
+            width: 20px;
+        }
+    }
+}
+
+.formControls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    & button {
+        width: 100px;
+        height: 40px;
+        display: inline-block;
+        &:first-of-type {
+            margin-right: auto;
+        }
+    }
+}
+
+
+

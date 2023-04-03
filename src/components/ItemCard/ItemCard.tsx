@@ -1,7 +1,7 @@
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import cl from './ItemCard.module.scss';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     changeItemQuantity,
@@ -12,8 +12,27 @@ import {
 import { Link, useParams } from 'react-router-dom';
 import MyImage from '../UI/MyImage';
 import { CareFilters, CatalogItem } from '../../types/catalogItem';
+import Back from '../UI/Back/Back';
 
 const ItemCard = () => {
+    const [mobile, setMobile] = useState(false);
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(max-width: 1023.98px)');
+        handleWindowResize();
+        function handleWindowResize() {
+            if (mediaQueryList.matches) {
+                setMobile(true);
+            } else {
+                setMobile(false);
+            }
+        }
+        mediaQueryList.addEventListener('change', handleWindowResize);
+        return () => {
+            mediaQueryList.removeEventListener('change', handleWindowResize);
+        };
+    }, []);
+
     const { code } = useParams();
 
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
@@ -92,12 +111,16 @@ const ItemCard = () => {
     return (
         <main className={cl.itemcard}>
             <div className={cl.container}>
-                <Breadcrumbs>
-                    <span>
-                        <Link to="/catalog">Каталог</Link>
-                    </span>
-                    <span>{`${item.brand} ${item.name}`}</span>
-                </Breadcrumbs>
+                {mobile ? (
+                    <Back />
+                ) : (
+                    <Breadcrumbs>
+                        <span>
+                            <Link to="/catalog">Каталог</Link>
+                        </span>
+                        <span>{`${item.brand} ${item.name}`}</span>
+                    </Breadcrumbs>
+                )}
                 <section className={cl.item}>
                     <MyImage
                         src={item.img}
@@ -165,14 +188,24 @@ const ItemCard = () => {
                             >
                                 В КОРЗИНУ <img src="images/basket.svg" alt="" />
                             </button>
+                            {mobile && (
+                                <div className={cl.share}>
+                                    <img
+                                        src="images/ci_share.svg"
+                                        alt="Поделиться"
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className={cl.buttons}>
-                            <div className={cl.share}>
-                                <img
-                                    src="images/ci_share.svg"
-                                    alt="Поделиться"
-                                />
-                            </div>
+                            {!mobile && (
+                                <div className={cl.share}>
+                                    <img
+                                        src="images/ci_share.svg"
+                                        alt="Поделиться"
+                                    />
+                                </div>
+                            )}
                             <div className={cl.bonus}>
                                 <div>
                                     При покупке от <strong>10 000 ₸</strong>{' '}

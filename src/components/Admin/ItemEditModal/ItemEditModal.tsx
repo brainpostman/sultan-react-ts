@@ -228,7 +228,7 @@ const ItemEditModal = ({
                     />
                 </label>
                 <label className={cl.descr}>
-                    Описание:{' '}
+                    <span> Описание:</span>
                     <textarea
                         value={newItemProps.descr}
                         onChange={(e) =>
@@ -283,9 +283,12 @@ const ItemEditModal = ({
                     />
                 </label>
                 <div className={cl.formControls}>
-                    <button onClick={cancelChanges}>Отменить</button>
+                    <button onClick={cancelChanges} className={cl.btn}>
+                        Отменить
+                    </button>
                     <button
                         onClick={() => saveChanges(codeInput, newItemProps)}
+                        className={cl.btn}
                     >
                         Сохранить
                     </button>

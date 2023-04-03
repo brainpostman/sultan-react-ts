@@ -12,6 +12,7 @@
         font-size: 40px;
         line-height: 1.2;
         text-transform: uppercase;
+        margin-top: 50px;
     }
     &__list {
         margin: 50px 0;
@@ -21,6 +22,7 @@
 
     &__buy {
         display: flex;
+        align-items: center;
         justify-content: space-between;
     }
     &__sum {
@@ -85,4 +87,47 @@
     background-color: $color_orange;
     width: 60px;
     height: 60px;
+}
+
+@media (max-width: 1499px) {
+    .cart {
+        margin-top: 93px;
+        &__container {
+        }
+        &__list {
+            align-items: center;
+        }
+        &__title {
+            margin-top: 25px;
+        }
+    }
+}
+
+@media (max-width: 1023.98px) {
+    .cart {
+        margin-top: 103px;
+        padding: 20px 0 40px 0;
+    }
+}
+
+@media (max-width: 460px) {
+    .cart {
+        &__title {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+        &__sum {
+            order: 1;
+            margin-bottom: 25px;
+        }
+        &__buy {
+            flex-direction: column;
+            & .btn {
+                order: 2;
+                width: 280px;
+                height: 80px;
+            }
+        }
+    }
 }

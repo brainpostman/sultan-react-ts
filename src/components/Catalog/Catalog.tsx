@@ -20,13 +20,15 @@ import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Back from '../UI/Back/Back';
+import useMobile from '../../hooks/useMobile';
+import ItemsPerPage from '../UI/Pagination/ItemsPerPage';
 
 const Catalog = () => {
     //получение каталога из store (а там из localStorage)
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
 
-    const [itemsPerPage, setItemsPerPage] = useState(9);
-    const [mobile, setMobile] = useState(false);
+    const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPage.DESKTOP);
+    const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
 
     //расширяющееся меню производителей
     const [mnfctDropdown, setMnfctDropdown] = useState(false);
@@ -72,54 +74,33 @@ const Catalog = () => {
     }
 
     useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 1415px)');
-        const mediaQueryList2 = window.matchMedia('(max-width: 1024px)');
-        const mediaQueryList3 = window.matchMedia('(max-width: 615px)');
-        handleWindowResize3();
-        function handleWindowResize1() {
-            if (mediaQueryList.matches) {
-                setItemsPerPage(10);
+        const mediaQueryListNotebook = window.matchMedia('(max-width: 1499px)');
+        const mediaQueryListTablet = window.matchMedia(
+            '(max-width: 1023.98px)'
+        );
+        const mediaQueryListMobile = window.matchMedia('(max-width: 615px)');
+        adaptPagination();
+        function adaptPagination() {
+            if (mediaQueryListMobile.matches) {
+                setItemsPerPage(ItemsPerPage.MOBILE);
+            } else if (mediaQueryListTablet.matches) {
+                setItemsPerPage(ItemsPerPage.TABLET);
+            } else if (mediaQueryListNotebook.matches) {
+                setItemsPerPage(ItemsPerPage.NOTEBOOK);
             } else {
-                setItemsPerPage(9);
+                setItemsPerPage(ItemsPerPage.DESKTOP);
             }
         }
-        function handleWindowResize2() {
-            if (mediaQueryList2.matches) {
-                setItemsPerPage(5);
-            } else {
-                handleWindowResize1();
-            }
-        }
-        function handleWindowResize3() {
-            if (mediaQueryList3.matches) {
-                setItemsPerPage(15);
-            } else {
-                handleWindowResize2();
-            }
-        }
-        mediaQueryList.addEventListener('change', handleWindowResize1);
-        mediaQueryList2.addEventListener('change', handleWindowResize2);
-        mediaQueryList3.addEventListener('change', handleWindowResize3);
+        mediaQueryListNotebook.addEventListener('change', adaptPagination);
+        mediaQueryListTablet.addEventListener('change', adaptPagination);
+        mediaQueryListMobile.addEventListener('change', adaptPagination);
         return () => {
-            mediaQueryList.removeEventListener('change', handleWindowResize1);
-            mediaQueryList2.removeEventListener('change', handleWindowResize2);
-            mediaQueryList3.removeEventListener('change', handleWindowResize3);
-        };
-    }, []);
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 615px)');
-        handleWindowResize();
-        function handleWindowResize() {
-            if (mediaQueryList.matches) {
-                setMobile(true);
-            } else {
-                setMobile(false);
-            }
-        }
-        mediaQueryList.addEventListener('change', handleWindowResize);
-        return () => {
-            mediaQueryList.removeEventListener('change', handleWindowResize);
+            mediaQueryListNotebook.removeEventListener(
+                'change',
+                adaptPagination
+            );
+            mediaQueryListTablet.removeEventListener('change', adaptPagination);
+            mediaQueryListMobile.removeEventListener('change', adaptPagination);
         };
     }, []);
 

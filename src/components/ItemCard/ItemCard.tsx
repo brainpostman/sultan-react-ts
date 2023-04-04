@@ -13,25 +13,10 @@ import { Link, useParams } from 'react-router-dom';
 import MyImage from '../UI/MyImage';
 import { CareFilters, CatalogItem } from '../../types/catalogItem';
 import Back from '../UI/Back/Back';
+import useMobile from '../../hooks/useMobile';
 
 const ItemCard = () => {
-    const [mobile, setMobile] = useState(false);
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 1023.98px)');
-        handleWindowResize();
-        function handleWindowResize() {
-            if (mediaQueryList.matches) {
-                setMobile(true);
-            } else {
-                setMobile(false);
-            }
-        }
-        mediaQueryList.addEventListener('change', handleWindowResize);
-        return () => {
-            mediaQueryList.removeEventListener('change', handleWindowResize);
-        };
-    }, []);
+    const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
 
     const { code } = useParams();
 

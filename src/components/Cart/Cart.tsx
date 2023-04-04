@@ -9,12 +9,13 @@ import Modal from '../UI/Modal/Modal';
 import cl from './Cart.module.scss';
 import CartItem from './CartItem.tsx/CartItem';
 import Back from '../UI/Back/Back';
+import useMobile from '../../hooks/useMobile';
 
 const Cart = () => {
     const { items, sum } = useTypedSelector((state) => state.cart);
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
-    const [mobile, setMobile] = useState(false);
+    const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
 
     const handleOrder = () => {
         if (sum > 0) {
@@ -26,22 +27,6 @@ const Cart = () => {
             behavior: 'smooth',
         });
     };
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 615px)');
-        handleWindowResize();
-        function handleWindowResize() {
-            if (mediaQueryList.matches) {
-                setMobile(true);
-            } else {
-                setMobile(false);
-            }
-        }
-        mediaQueryList.addEventListener('change', handleWindowResize);
-        return () => {
-            mediaQueryList.removeEventListener('change', handleWindowResize);
-        };
-    }, []);
 
     return (
         <main className={cl.cart}>

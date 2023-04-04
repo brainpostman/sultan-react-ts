@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import cl from './Header.module.scss';
 import { useEffect, useState } from 'react';
+import useMobile from '../../hooks/useMobile';
 
 export default function Header() {
     const { sum, quantity } = useTypedSelector((state) => state.cart);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [mobile, setMobile] = useState(false);
+    const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
     let burgerMenuClasses = `${cl.contacts__container}${
         menuOpen ? ' ' + cl.menuActive : ''
     }`;
@@ -14,25 +15,10 @@ export default function Header() {
         menuOpen ? ' ' + cl.burger__active : ''
     }`;
     useEffect(() => {
-        const mediaQueryList = window.matchMedia('(min-width: 1500px)');
+        const mediaQueryList = window.matchMedia('(max-width: 1499px)');
         function handleWindowResize() {
             if (mediaQueryList.matches) {
                 setMenuOpen(false);
-            }
-        }
-        mediaQueryList.addEventListener('change', handleWindowResize);
-        return () => {
-            mediaQueryList.removeEventListener('change', handleWindowResize);
-        };
-    }, []);
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 1023.99px)');
-        handleWindowResize();
-        function handleWindowResize() {
-            if (mediaQueryList.matches) {
-                setMobile(true);
-            } else {
-                setMobile(false);
             }
         }
         mediaQueryList.addEventListener('change', handleWindowResize);

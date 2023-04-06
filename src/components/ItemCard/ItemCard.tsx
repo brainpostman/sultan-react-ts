@@ -50,13 +50,13 @@ const ItemCard = () => {
         setEditingQuantity(true);
         if (itemInCart) setInputValue(String(itemInCart.inCart));
         quantityInputRef.current?.focus();
-        document.addEventListener('keydown', handleNoChangeBlur);
     };
 
-    function handleNoChangeBlur(event: KeyboardEvent) {
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Escape' || event.key === 'Tab') {
             setEditingQuantity(false);
-            document.removeEventListener('keydown', handleNoChangeBlur);
+        } else if (event.key === 'Enter') {
+            handleAcceptInput();
         }
     }
 
@@ -72,7 +72,7 @@ const ItemCard = () => {
         setInputValue(`${+newInput}`);
     };
 
-    const handleInputBlur = () => {
+    const handleAcceptInput = () => {
         setEditingQuantity(false);
         if (cartItems.has(item.code)) {
             dispatch(changeItemQuantity(item.code, +inputValue));
@@ -80,7 +80,6 @@ const ItemCard = () => {
             dispatch(addItem(item));
             dispatch(changeItemQuantity(item.code, +inputValue));
         }
-        document.removeEventListener('keydown', handleNoChangeBlur);
     };
 
     return (
@@ -131,8 +130,9 @@ const ItemCard = () => {
                                             type='number'
                                             name='cart-quantity'
                                             id='cart-quantity'
-                                            onBlur={handleInputBlur}
+                                            onBlur={handleAcceptInput}
                                             onInput={handleInputChange}
+                                            onKeyDown={handleKeyPress}
                                         />
                                     ) : (
                                         <div onClick={handleInputFocus}>

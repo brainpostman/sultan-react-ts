@@ -276,7 +276,6 @@ const Admin = () => {
                     </div>
                     <Pagination
                         items={filteredByNamePrice}
-                        itemsPerPage={9}
                         renderItem={(item: ICatalogItem) => {
                             return (
                                 <AdminItem

@@ -16,40 +16,11 @@ import Pagination from '../UI/Pagination/Pagination';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
-import ItemsPerPage from '../UI/Pagination/ItemsPerPage';
 import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
 
 const Catalog = () => {
-    //пагинация и флаг адаптивной стилизации
-    const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPage.DESKTOP);
+    //флаг адаптивной стилизации
     const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
-    //изменение пагинации в зависимости от размера окна
-    useEffect(() => {
-        const mediaQueryListNotebook = window.matchMedia('(max-width: 1499px)');
-        const mediaQueryListTablet = window.matchMedia('(max-width: 1023.98px)');
-        const mediaQueryListMobile = window.matchMedia('(max-width: 615px)');
-        adaptPagination();
-        function adaptPagination() {
-            if (mediaQueryListMobile.matches) {
-                setItemsPerPage(ItemsPerPage.MOBILE);
-            } else if (mediaQueryListTablet.matches) {
-                setItemsPerPage(ItemsPerPage.TABLET);
-            } else if (mediaQueryListNotebook.matches) {
-                setItemsPerPage(ItemsPerPage.NOTEBOOK);
-            } else {
-                setItemsPerPage(ItemsPerPage.DESKTOP);
-            }
-        }
-        mediaQueryListNotebook.addEventListener('change', adaptPagination);
-        mediaQueryListTablet.addEventListener('change', adaptPagination);
-        mediaQueryListMobile.addEventListener('change', adaptPagination);
-        return () => {
-            mediaQueryListNotebook.removeEventListener('change', adaptPagination);
-            mediaQueryListTablet.removeEventListener('change', adaptPagination);
-            mediaQueryListMobile.removeEventListener('change', adaptPagination);
-        };
-    }, []);
-
     //получение каталога из store (а там из localStorage)
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
     const catalogArr = useMemo(() => {
@@ -84,14 +55,18 @@ const Catalog = () => {
     //расширяющийся список производителей и фильтров (при мобильной стилизации)
     const [mnfctExpandList, setMnfctExpandList] = useState(false);
     const mnfctExpandRef = useRef<HTMLDivElement>(null);
+    const initialMnfctShown = 4;
+    const initialMnfctListHeight = 84;
+    const maxListHeight = 315;
 
     function handleMnfctExpand() {
         setMnfctExpandList((prevValue) => {
             if (mnfctExpandRef.current) {
                 if (!prevValue) {
-                    mnfctExpandRef.current.style.height = `${filteredMnfctrs.length * 21}px`;
+                    mnfctExpandRef.current.style.height =
+                        Math.min(mnfctExpandRef.current.scrollHeight, maxListHeight) + 'px';
                 } else {
-                    mnfctExpandRef.current.style.height = '84px';
+                    mnfctExpandRef.current.style.height = initialMnfctListHeight + 'px';
                 }
             }
             return !prevValue;
@@ -108,14 +83,17 @@ const Catalog = () => {
     function handleFilterExpand() {
         setFiltersExpandMenu((prevValue) => {
             if (mnfctExpandRef.current && mnfctExpandList) {
-                mnfctExpandRef.current.style.height = '84px';
+                mnfctExpandRef.current.style.height = initialMnfctListHeight + 'px';
                 setMnfctExpandList(false);
             }
             if (filtersExpandRef.current) {
                 if (!prevValue) {
-                    filtersExpandRef.current.style.height = '846px';
+                    filtersExpandRef.current.style.height =
+                        filtersExpandRef.current.scrollHeight + 'px';
+                    filtersExpandRef.current.style.overflowY = 'scroll';
                 } else {
                     filtersExpandRef.current.style.height = '0';
+                    filtersExpandRef.current.style.overflowY = 'hidden';
                 }
             }
             return !prevValue;
@@ -326,7 +304,7 @@ const Catalog = () => {
                                     )}
                                 </div>
                                 <button className={cl.showAll} onClick={handleMnfctExpand}>
-                                    {filteredMnfctrs.length > 4 && (
+                                    {filteredMnfctrs.length > initialMnfctShown && (
                                         <div>
                                             {mnfctExpandList ? (
                                                 <div className={cl.showAll__container}>
@@ -351,26 +329,26 @@ const Catalog = () => {
                                     </button>
                                 </div>
                             </div>
-                            <List
-                                items={defaultCareFiltersArr}
-                                renderItem={(item: ICareFilter) => {
-                                    return (
-                                        <CareFilter
-                                            onClick={updateCareFilter}
-                                            filter={item}
-                                            className={cl.careTypeLeft__item}
-                                            key={item.type}
-                                            activeClass={
-                                                activeCareFilters.has(item.type)
-                                                    ? cl.careTypeLeft__item_active
-                                                    : ''
-                                            }
-                                        />
-                                    );
-                                }}
-                                className={cl.careTypeLeft}
-                            />
                         </div>
+                        <List
+                            items={defaultCareFiltersArr}
+                            renderItem={(item: ICareFilter) => {
+                                return (
+                                    <CareFilter
+                                        onClick={updateCareFilter}
+                                        filter={item}
+                                        className={cl.careTypeLeft__item}
+                                        key={item.type}
+                                        activeClass={
+                                            activeCareFilters.has(item.type)
+                                                ? cl.careTypeLeft__item_active
+                                                : ''
+                                        }
+                                    />
+                                );
+                            }}
+                            className={cl.careTypeLeft}
+                        />
                     </div>
                     {mobile && (
                         <div className={cl.sort}>
@@ -392,7 +370,6 @@ const Catalog = () => {
                     {filteredByNamePrice.length !== 0 ? (
                         <Pagination
                             items={filteredByNamePrice}
-                            itemsPerPage={itemsPerPage}
                             renderItem={(item: ICatalogItem) => {
                                 return <CatalogItem item={item} key={item.code} />;
                             }}

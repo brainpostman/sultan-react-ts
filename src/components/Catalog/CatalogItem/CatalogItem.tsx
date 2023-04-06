@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { addItem } from '../../../store/action-creators/cartActions';
-import { ICatalogItem, CareFilters } from '../../../types/catalogItem';
+import { ICatalogItem } from '../../../types/catalogItem';
 import cl from './CatalogItem.module.scss';
 import MyImage from '../../UI/MyImage';
 import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';

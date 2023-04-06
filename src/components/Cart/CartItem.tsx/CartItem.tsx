@@ -26,7 +26,6 @@ const CartItem = ({ item }: CatalogItemProps) => {
     const handleRemoveItem = () => dispatch(removeItem(item.code));
 
     const handleInputFocus = () => {
-        console.log('focus ' + inputValue);
         setEditingQuantity(true);
         setInputValue(String(item.inCart));
         quantityInputRef.current?.focus();

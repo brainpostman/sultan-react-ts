@@ -1,25 +1,47 @@
 import { useEffect, useState } from 'react';
 import List from '../List';
 import cl from './Pagination.module.scss';
+import ItemsPerPage from './ItemsPerPage';
 
 interface PaginationProps<T> {
     items: T[];
     className?: string;
     renderItem: (item: T) => React.ReactNode;
-    itemsPerPage: number;
 }
 
-export default function Pagination<T>({
-    items,
-    className,
-    renderItem,
-    itemsPerPage,
-}: PaginationProps<T>) {
+export default function Pagination<T>({ items, className, renderItem }: PaginationProps<T>) {
+    const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPage.DESKTOP);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = items.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(items.length / itemsPerPage);
+
+    useEffect(() => {
+        const mediaQueryListNotebook = window.matchMedia('(max-width: 1499px)');
+        const mediaQueryListTablet = window.matchMedia('(max-width: 1023.98px)');
+        const mediaQueryListMobile = window.matchMedia('(max-width: 615px)');
+        adaptPagination();
+        function adaptPagination() {
+            if (mediaQueryListMobile.matches) {
+                setItemsPerPage(ItemsPerPage.MOBILE);
+            } else if (mediaQueryListTablet.matches) {
+                setItemsPerPage(ItemsPerPage.TABLET);
+            } else if (mediaQueryListNotebook.matches) {
+                setItemsPerPage(ItemsPerPage.NOTEBOOK);
+            } else {
+                setItemsPerPage(ItemsPerPage.DESKTOP);
+            }
+        }
+        mediaQueryListNotebook.addEventListener('change', adaptPagination);
+        mediaQueryListTablet.addEventListener('change', adaptPagination);
+        mediaQueryListMobile.addEventListener('change', adaptPagination);
+        return () => {
+            mediaQueryListNotebook.removeEventListener('change', adaptPagination);
+            mediaQueryListTablet.removeEventListener('change', adaptPagination);
+            mediaQueryListMobile.removeEventListener('change', adaptPagination);
+        };
+    }, []);
 
     let pageNumbers: number[] = [];
 

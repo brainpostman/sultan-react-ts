@@ -51,31 +51,17 @@ const Cart = () => {
                         Оформить заказ
                     </button>
                     <span className={cl.cart__sum}>
-                        {String(sum.toFixed(2))
-                            .replace(/\./g, ',')
-                            .replace(/,00/g, '') + ' ₸'}
+                        {String(sum.toFixed(2)).replace(/\./g, ',').replace(/,00/g, '') + ' ₸'}
                     </span>
                     {showModal && (
-                        <Modal
-                            className={cl.modalbg}
-                            onClick={() => setShowModal(false)}
-                        >
-                            <div
-                                className={cl.modal}
-                                onClick={(event) => event.stopPropagation()}
-                            >
-                                <div
-                                    className={cl.close}
-                                    onClick={() => setShowModal(false)}
-                                ></div>
+                        <Modal className={cl.modalbg} onClick={() => setShowModal(false)}>
+                            <div className={cl.modal} onClick={(event) => event.stopPropagation()}>
+                                <div className={cl.close} onClick={() => setShowModal(false)}></div>
                                 <div className={cl.modalcheck}>
-                                    <img src="images/double-check.svg" />
+                                    <img src='images/double-check.svg' />
                                 </div>
                                 <h3>СПАСИБО ЗА ЗАКАЗ</h3>
-                                <p>
-                                    Наш менеджер свяжется с вами в ближайшее
-                                    время
-                                </p>
+                                <p>Наш менеджер свяжется с вами в ближайшее время</p>
                             </div>
                         </Modal>
                     )}

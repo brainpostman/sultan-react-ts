@@ -1,46 +1,18 @@
-import {
-    ICareFilter,
-    ICatalogItem,
-    CareFilters,
-} from '../../../types/catalogItem';
+import { ICatalogItem } from '../../../types/catalogItem';
 import cl from './AdminItem.module.scss';
 import MyImage from '../../UI/MyImage';
 import { useState } from 'react';
-import deepCopyMap from '../../../utils/deepCopyMap';
 import ItemEditModal from '../ItemEditModal/ItemEditModal';
+import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
 
 interface CatalogItemProps {
     item: ICatalogItem;
     handleDelete: (itemCode: string) => void;
     catalogMap: Map<string, ICatalogItem>;
-    setCatalogMap: (
-        value: React.SetStateAction<Map<string, ICatalogItem>>
-    ) => void;
+    setCatalogMap: (value: React.SetStateAction<Map<string, ICatalogItem>>) => void;
 }
 
-const CatalogItem = ({
-    item,
-    handleDelete,
-    catalogMap,
-    setCatalogMap,
-}: CatalogItemProps) => {
-    let careTypeStringsArr: string[] = [];
-    let careTypesObj = item.types;
-
-    let careFilters = new Map<string, ICareFilter>();
-    let defaultCareFilters = new CareFilters();
-    for (let careType in defaultCareFilters) {
-        careFilters.set(careType, defaultCareFilters[careType]);
-        if (careTypesObj[careType]) {
-            let filter = careFilters.get(careType);
-            if (filter) filter.checked = true;
-            careTypeStringsArr.push(defaultCareFilters[careType].value);
-        }
-    }
-
-    const [careFilterState, setCareFilterState] = useState<
-        Map<string, ICareFilter>
-    >(deepCopyMap(careFilters));
+const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogItemProps) => {
     const [isRedacting, setIsRedacting] = useState(false);
 
     return (
@@ -79,20 +51,26 @@ const CatalogItem = ({
                     Цена: <span>{item.price} ₸</span>
                 </div>
                 <div className={cl.careTypes}>
-                    Типы ухода: <span>{careTypeStringsArr.join(', ')}</span>
+                    Типы ухода:{' '}
+                    <span>
+                        {defaultCareFiltersArr
+                            .filter((filter) => {
+                                return item.types[filter.type];
+                            })
+                            .map((filter) => {
+                                return filter.value.toLowerCase();
+                            })
+                            .join(', ')}
+                    </span>
                 </div>
             </div>
             <div className={cl.item__controls}>
                 <button
                     className={`${cl.btn} ${cl.delete}`}
-                    onClick={() => handleDelete(item.code)}
-                >
-                    <img src="images/trash.svg" alt="Удалить" />
+                    onClick={() => handleDelete(item.code)}>
+                    <img src='images/trash.svg' alt='Удалить' />
                 </button>
-                <button
-                    className={`${cl.btn} ${cl.redact}`}
-                    onClick={() => setIsRedacting(true)}
-                >
+                <button className={`${cl.btn} ${cl.redact}`} onClick={() => setIsRedacting(true)}>
                     Редактировать
                 </button>
             </div>
@@ -100,13 +78,7 @@ const CatalogItem = ({
                 <ItemEditModal
                     item={item}
                     setIsRedacting={setIsRedacting}
-                    defaultCareFilters={careFilters}
-                    careFilterState={careFilterState}
-                    setCareFilterState={setCareFilterState}
-                    saveChanges={(
-                        newCode: string,
-                        newItemProps: ICatalogItem
-                    ) => {
+                    saveChanges={(newCode: string, newItemProps: ICatalogItem) => {
                         catalogMap.delete(item.code);
                         catalogMap.set(newCode, newItemProps);
                         setIsRedacting(false);
@@ -118,4 +90,4 @@ const CatalogItem = ({
     );
 };
 
-export default CatalogItem;
+export default AdminItem;

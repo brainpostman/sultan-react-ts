@@ -74,32 +74,29 @@ export interface ICareFilters {
 export interface ICareFilter {
     type: string;
     value: string;
-    checked: boolean;
 }
 
 export class CareFilters implements ICareFilters {
-    body = { type: 'body', value: 'Уход за телом', checked: false };
-    hands = { type: 'hands', value: 'Уход за руками', checked: false };
-    legs = { type: 'legs', value: 'Уход за ногами', checked: false };
-    face = { type: 'face', value: 'Уход за лицом', checked: false };
-    hair = { type: 'hair', value: 'Уход за волосами', checked: false };
-    suntan = { type: 'suntan', value: 'Средства для загара', checked: false };
-    shave = { type: 'shave', value: 'Средства для бритья', checked: false };
-    gift = { type: 'gift', value: 'Подарочные наборы', checked: false };
-    hygiene = {
+    body: ICareFilter = { type: 'body', value: 'Уход за телом' };
+    hands: ICareFilter = { type: 'hands', value: 'Уход за руками' };
+    legs: ICareFilter = { type: 'legs', value: 'Уход за ногами' };
+    face: ICareFilter = { type: 'face', value: 'Уход за лицом' };
+    hair: ICareFilter = { type: 'hair', value: 'Уход за волосами' };
+    suntan: ICareFilter = { type: 'suntan', value: 'Средства для загара' };
+    shave: ICareFilter = { type: 'shave', value: 'Средства для бритья' };
+    gift: ICareFilter = { type: 'gift', value: 'Подарочные наборы' };
+    hygiene: ICareFilter = {
         type: 'hygiene',
         value: 'Гигиеническая продукция',
-        checked: false,
     };
-    mouth = { type: 'mouth', value: 'Гигиена полости рта', checked: false };
-    paper = { type: 'paper', value: 'Бумажная продукция', checked: false };
+    mouth: ICareFilter = { type: 'mouth', value: 'Гигиена полости рта' };
+    paper: ICareFilter = { type: 'paper', value: 'Бумажная продукция' };
     [key: string]: ICareFilter;
 }
 
 export interface IManufacturerInfo {
     name: string;
     amount: number;
-    checked: boolean;
 }
 
 export interface ICatalogState {

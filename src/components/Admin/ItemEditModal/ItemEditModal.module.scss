@@ -1,4 +1,4 @@
-@import 'src/styles/commons';
+@import "src/styles/commons";
 
 .redactForm {
     display: flex;
@@ -9,7 +9,7 @@
     padding: 15px;
     gap: 10px;
     width: 700px;
-    & label {
+    & > * {
         font-weight: 800;
         font-size: 12px;
         line-height: 1.2;
@@ -20,7 +20,8 @@
     & input {
         width: 600px;
     }
-    & input, & textarea {
+    & input,
+    & textarea {
         margin-left: 5px;
         width: 500px;
         border: 1px solid black;
@@ -58,8 +59,41 @@
     columns: 3;
     &__item {
         width: 100%;
+        & label {
+            display: flex;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 1.5;
+            color: $color_gray;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
         & input {
-            width: 20px;
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            margin-right: 10px;
+            font: inherit;
+            color: currentColor;
+            width: 10px;
+            height: 10px;
+            border: 1px solid currentColor;
+            border-radius: 2px;
+            @include center-content;
+            cursor: pointer;
+            &::before {
+                content: "";
+                width: 6px;
+                height: 6px;
+                transform: scale(0);
+                transition: 120ms transform ease-in-out;
+                box-shadow: inset 1em 1em $color_orange;
+                border-radius: 1px;
+            }
+            &:checked::before {
+                transform: scale(1);
+            }
         }
     }
 }
@@ -77,6 +111,3 @@
         }
     }
 }
-
-
-

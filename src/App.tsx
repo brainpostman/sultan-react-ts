@@ -10,20 +10,17 @@ import Admin from './components/Admin/Admin';
 
 function App() {
     return (
-        <div className="wrapper">
-            <BrowserRouter basename="sultan-react-ts">
+        <div className='wrapper'>
+            <BrowserRouter basename='sultan-react-ts'>
                 <ScrollToTop />
                 <Header />
                 <Routes>
-                    <Route
-                        path="/"
-                        element={<Navigate to="catalog" replace />}
-                    />
-                    <Route path="catalog/*" element={<Catalog />} />
-                    <Route path="catalog/:code" element={<ItemCard />} />
-                    <Route path="cart" element={<Cart />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                    <Route path="admin" element={<Admin />} />
+                    <Route path='/' element={<Navigate to='catalog' replace />} />
+                    <Route path='catalog/*' element={<Catalog />} />
+                    <Route path='catalog/:code' element={<ItemCard />} />
+                    <Route path='cart' element={<Cart />} />
+                    <Route path='*' element={<Navigate to='/' replace />} />
+                    <Route path='admin' element={<Admin />} />
                 </Routes>
                 <Footer />
             </BrowserRouter>

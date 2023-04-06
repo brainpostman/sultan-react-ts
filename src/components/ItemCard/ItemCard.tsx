@@ -1,7 +1,7 @@
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import cl from './ItemCard.module.scss';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     changeItemQuantity,
@@ -11,9 +11,10 @@ import {
 } from '../../store/action-creators/cartActions';
 import { Link, useParams } from 'react-router-dom';
 import MyImage from '../UI/MyImage';
-import { CareFilters, CatalogItem } from '../../types/catalogItem';
+import { CatalogItem } from '../../types/catalogItem';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
+import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
 
 const ItemCard = () => {
     const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
@@ -22,23 +23,12 @@ const ItemCard = () => {
 
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
     const { items: cartItems } = useTypedSelector((state) => state.cart);
-    const item = catalogItems.get(code || 'A0000626419') || new CatalogItem();
+    const item = catalogItems.get(code || '') || new CatalogItem();
     const itemInCart = cartItems.get(item.code);
 
     const [editingQuantity, setEditingQuantity] = useState(false);
-    const [inputValue, setInputValue] = useState(
-        String(itemInCart?.inCart || 0)
-    );
+    const [inputValue, setInputValue] = useState(String(itemInCart?.inCart || 0));
     const quantityInputRef = useRef<HTMLInputElement>(null);
-
-    let careTypes: string[] = [];
-    let careTypesObj = item.types;
-    let defaultCareFilters = new CareFilters();
-    for (let careType in careTypesObj) {
-        if (careTypesObj[careType as keyof typeof careTypesObj]) {
-            careTypes.push(defaultCareFilters[careType].value);
-        }
-    }
 
     const dispatch = useDispatch();
     const handleIncrementItem = () => {
@@ -101,17 +91,13 @@ const ItemCard = () => {
                 ) : (
                     <Breadcrumbs>
                         <span>
-                            <Link to="/catalog">Каталог</Link>
+                            <Link to='/catalog'>Каталог</Link>
                         </span>
                         <span>{`${item.brand} ${item.name}`}</span>
                     </Breadcrumbs>
                 )}
                 <section className={cl.item}>
-                    <MyImage
-                        src={item.img}
-                        containerClass={cl.image}
-                        errorClass={cl.imgerror}
-                    />
+                    <MyImage src={item.img} containerClass={cl.image} errorClass={cl.imgerror} />
                     <div className={cl.itemInfo}>
                         <p className={cl.instore}>В наличии</p>
                         <h2 className={cl.name}>
@@ -119,9 +105,9 @@ const ItemCard = () => {
                         </h2>
                         <p className={cl.unit}>
                             {item.unit === 'мл' ? (
-                                <img src="images/whh_bottle.svg" />
+                                <img src='images/whh_bottle.svg' />
                             ) : (
-                                <img src="images/fa-solid_box-open.svg" />
+                                <img src='images/fa-solid_box-open.svg' />
                             )}
                             <span>
                                 {item.amount} {item.unit}
@@ -134,23 +120,17 @@ const ItemCard = () => {
                                     .replace(/,00/g, '') + ' ₸'}
                             </span>
                             <div className={cl.quantity}>
-                                <button
-                                    className={cl.changeAmount}
-                                    onClick={handleDecrementItem}
-                                >
+                                <button className={cl.changeAmount} onClick={handleDecrementItem}>
                                     -
                                 </button>
-                                <label
-                                    htmlFor="cart-quantity"
-                                    className={cl.incart}
-                                >
+                                <label htmlFor='cart-quantity' className={cl.incart}>
                                     {editingQuantity ? (
                                         <input
                                             ref={quantityInputRef}
                                             value={inputValue}
-                                            type="number"
-                                            name="cart-quantity"
-                                            id="cart-quantity"
+                                            type='number'
+                                            name='cart-quantity'
+                                            id='cart-quantity'
                                             onBlur={handleInputBlur}
                                             onInput={handleInputChange}
                                         />
@@ -160,46 +140,34 @@ const ItemCard = () => {
                                         </div>
                                     )}
                                 </label>
-                                <button
-                                    className={cl.changeAmount}
-                                    onClick={handleIncrementItem}
-                                >
+                                <button className={cl.changeAmount} onClick={handleIncrementItem}>
                                     +
                                 </button>
                             </div>
-                            <button
-                                className={`${cl.btn} ${cl.buy}`}
-                                onClick={handleAddItem}
-                            >
-                                В КОРЗИНУ <img src="images/basket.svg" alt="" />
+                            <button className={`${cl.btn} ${cl.buy}`} onClick={handleAddItem}>
+                                В КОРЗИНУ <img src='images/basket.svg' alt='' />
                             </button>
                             {mobile && (
                                 <div className={cl.share}>
-                                    <img
-                                        src="images/ci_share.svg"
-                                        alt="Поделиться"
-                                    />
+                                    <img src='images/ci_share.svg' alt='Поделиться' />
                                 </div>
                             )}
                         </div>
                         <div className={cl.buttons}>
                             {!mobile && (
                                 <div className={cl.share}>
-                                    <img
-                                        src="images/ci_share.svg"
-                                        alt="Поделиться"
-                                    />
+                                    <img src='images/ci_share.svg' alt='Поделиться' />
                                 </div>
                             )}
                             <div className={cl.bonus}>
                                 <div>
-                                    При покупке от <strong>10 000 ₸</strong>{' '}
-                                    бесплатная доставка по Кокчетаву и области
+                                    При покупке от <strong>10 000 ₸</strong> бесплатная доставка по
+                                    Кокчетаву и области
                                 </div>
                             </div>
                             <button className={cl.pricelist}>
                                 Прайс-лист
-                                <img src="images/download-gray.svg" />
+                                <img src='images/download-gray.svg' />
                             </button>
                         </div>
                         <div className={cl.info}>
@@ -223,7 +191,17 @@ const ItemCard = () => {
                         <div className={cl.specifications}>
                             <h3>Характеристики:</h3>
                             <p>
-                                Типы ухода: <span>{careTypes.join(', ')}</span>
+                                Типы ухода:{' '}
+                                <span>
+                                    {defaultCareFiltersArr
+                                        .filter((filter) => {
+                                            return item.types[filter.type];
+                                        })
+                                        .map((filter) => {
+                                            return filter.value.toLowerCase();
+                                        })
+                                        .join(', ')}
+                                </span>
                             </p>
                             <p>
                                 Назначение: <span>{item.code}</span>

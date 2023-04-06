@@ -26,17 +26,23 @@ const CartItem = ({ item }: CatalogItemProps) => {
     const handleRemoveItem = () => dispatch(removeItem(item.code));
 
     const handleInputFocus = () => {
+        console.log('focus ' + inputValue);
         setEditingQuantity(true);
         setInputValue(String(item.inCart));
         quantityInputRef.current?.focus();
-        document.addEventListener('keydown', handleNoChangeBlur);
     };
 
-    function handleNoChangeBlur(event: KeyboardEvent) {
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Escape' || event.key === 'Tab') {
             setEditingQuantity(false);
-            document.removeEventListener('keydown', handleNoChangeBlur);
+        } else if (event.key === 'Enter') {
+            handleAcceptInput();
         }
+    }
+
+    function handleAcceptInput() {
+        setEditingQuantity(false);
+        dispatch(changeItemQuantity(item.code, +inputValue));
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,12 +57,6 @@ const CartItem = ({ item }: CatalogItemProps) => {
         setInputValue(`${newInput}`);
     };
 
-    const handleInputBlur = () => {
-        setEditingQuantity(false);
-        dispatch(changeItemQuantity(item.code, +inputValue));
-        document.removeEventListener('keydown', handleNoChangeBlur);
-    };
-
     return (
         <div className={cl.item}>
             <MyImage
@@ -67,9 +67,9 @@ const CartItem = ({ item }: CatalogItemProps) => {
             <div className={cl.item__info}>
                 <p className={cl.item__unit}>
                     {item.unit === 'мл' ? (
-                        <img src="images/whh_bottle.svg" />
+                        <img src='images/whh_bottle.svg' />
                     ) : (
-                        <img src="images/fa-solid_box-open.svg" />
+                        <img src='images/fa-solid_box-open.svg' />
                     )}
                     <span>
                         {item.amount} {item.unit}
@@ -80,44 +80,35 @@ const CartItem = ({ item }: CatalogItemProps) => {
                         {item.brand}{' '}
                         {item.brand.length + item.name.length < 60
                             ? item.name
-                            : item.name
-                                  .slice(0, 60 - item.brand.length)
-                                  .trimEnd() + '...'}
+                            : item.name.slice(0, 60 - item.brand.length).trimEnd() + '...'}
                     </h3>
                 </Link>
                 <p className={cl.item__description}>{item.descr}</p>
             </div>
             <div className={cl.item__controls}>
                 <div className={cl.item__quantity}>
-                    <button
-                        className={cl.item__changeAmount}
-                        onClick={handleDecrementItem}
-                    >
+                    <button className={cl.item__changeAmount} onClick={handleDecrementItem}>
                         -
                     </button>
                     <div className={cl.item__incart}>
-                        <label htmlFor="cart-quantity">
+                        <label htmlFor='cart-quantity'>
                             {editingQuantity ? (
                                 <input
                                     ref={quantityInputRef}
                                     value={inputValue}
-                                    type="number"
-                                    name="cart-quantity"
-                                    id="cart-quantity"
-                                    onBlur={handleInputBlur}
+                                    type='number'
+                                    name='cart-quantity'
+                                    id='cart-quantity'
+                                    onBlur={handleAcceptInput}
                                     onInput={handleInputChange}
+                                    onKeyDown={handleKeyPress}
                                 />
                             ) : (
-                                <div onClick={handleInputFocus}>
-                                    {item.inCart}
-                                </div>
+                                <div onClick={handleInputFocus}>{item.inCart}</div>
                             )}
                         </label>
                     </div>
-                    <button
-                        className={cl.item__changeAmount}
-                        onClick={handleIncrementItem}
-                    >
+                    <button className={cl.item__changeAmount} onClick={handleIncrementItem}>
                         +
                     </button>
                 </div>
@@ -131,9 +122,8 @@ const CartItem = ({ item }: CatalogItemProps) => {
                 <div className={cl.item__remove}>
                     <button
                         className={`${cl.item__deletebtn} ${cl.btn}`}
-                        onClick={handleRemoveItem}
-                    >
-                        <img src="images/trash.svg" alt="Удалить" />
+                        onClick={handleRemoveItem}>
+                        <img src='images/trash.svg' alt='Удалить' />
                     </button>
                 </div>
             </div>

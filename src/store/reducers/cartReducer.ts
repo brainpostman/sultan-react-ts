@@ -1,9 +1,4 @@
-import {
-    CartAction,
-    CartActionTypes,
-    ICartItem,
-    ICartState,
-} from '../../types/cartItem';
+import { CartAction, CartActionTypes, ICartItem, ICartState } from '../../types/cartItem';
 import deepCopyMap from '../../utils/deepCopyMap';
 
 const initialState: ICartState = {
@@ -12,10 +7,7 @@ const initialState: ICartState = {
     quantity: 0,
 };
 
-export const cartReducer = (
-    state = initialState,
-    action: CartAction
-): ICartState => {
+export const cartReducer = (state = initialState, action: CartAction): ICartState => {
     let tempMap = deepCopyMap(state.items);
     switch (action.type) {
         case CartActionTypes.ADD_TO_CART: {

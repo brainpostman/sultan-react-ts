@@ -75,6 +75,7 @@
         justify-content: flex-end;
         align-items: center;
         flex: 1 0 40%;
+        height: 60px;
         & > * {
             border-left: 1px dashed rgba(63, 78, 101, 0.3);
             padding: 0 30px;
@@ -84,6 +85,7 @@
     &__quantity {
         flex: 0 0 5%;
         @include center-content;
+        height: 100%;
     }
 
     &__changeAmount {
@@ -124,6 +126,7 @@
 
     &__price {
         @include center-content;
+        height: 100%;
         flex: 0 0 240px;
         font-weight: 700;
         font-size: 30px;

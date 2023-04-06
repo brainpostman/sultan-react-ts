@@ -65,19 +65,11 @@ export default function Pagination<T>({
 
     return (
         <div className={cl.pagination__container}>
-            <List
-                items={currentItems}
-                renderItem={renderItem}
-                className={className}
-            />
+            <List items={currentItems} renderItem={renderItem} className={className} />
             {!(items.length <= itemsPerPage) && (
                 <div className={cl.pagination__controls}>
                     <div
-                        className={
-                            currentPage === 0
-                                ? cl.arrow_left_inactive
-                                : cl.arrow_left
-                        }
+                        className={currentPage === 0 ? cl.arrow_left_inactive : cl.arrow_left}
                         onClick={handlePrevClick}
                     />
                     <div className={cl.pageNumbers}>
@@ -90,8 +82,7 @@ export default function Pagination<T>({
                                             : cl.pageNumbers__page
                                     }
                                     key={item}
-                                    onClick={() => handlePageClick(item)}
-                                >
+                                    onClick={() => handlePageClick(item)}>
                                     {item + 1}
                                 </span>
                             );

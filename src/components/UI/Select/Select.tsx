@@ -15,8 +15,7 @@ const Select = ({ options, value, onChange, className }: ISelectProps) => {
             <select
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                className={cl.select}
-            >
+                className={cl.select}>
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.name}

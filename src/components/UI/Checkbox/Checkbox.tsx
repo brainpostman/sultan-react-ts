@@ -7,21 +7,15 @@ interface ICheckboxProps<T> extends PropsWithChildren {
     className?: string;
 }
 
-const Checkbox = <T,>({
-    item,
-    onChange,
-    checked,
-    className,
-    children,
-}: ICheckboxProps<T>) => {
+const Checkbox = <T,>({ item, onChange, checked, className, children }: ICheckboxProps<T>) => {
     return (
         <div className={className}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={() => onChange(item)}
-                />
+            <label
+                onChange={(e) => {
+                    e.stopPropagation();
+                    onChange(item);
+                }}>
+                <input type='checkbox' checked={checked} />
                 {children}
             </label>
         </div>

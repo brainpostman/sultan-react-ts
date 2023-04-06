@@ -3,13 +3,8 @@ import useCareFilter from '../../hooks/useCareFilter';
 import useCareState from '../../hooks/useCareState';
 import useMnfctState from '../../hooks/useMnfctState';
 import useSort from '../../hooks/useSort';
-import {
-    ICatalogItem,
-    ICareFilter,
-    CareFilters,
-    IManufacturerInfo,
-} from '../../types/catalogItem';
-import { createManufacturerMap } from '../../utils/createManufacturerLists';
+import { ICatalogItem, ICareFilter, IManufacturerInfo } from '../../types/catalogItem';
+import { createMnfctrsArr } from '../../utils/createMnfctrsArr';
 import List from '../UI/List';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import CatalogItem from './CatalogItem/CatalogItem';
@@ -22,62 +17,16 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
 import ItemsPerPage from '../UI/Pagination/ItemsPerPage';
+import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
 
 const Catalog = () => {
-    //получение каталога из store (а там из localStorage)
-    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
-
+    //пагинация и флаг адаптивной стилизации
     const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPage.DESKTOP);
     const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
-
-    //расширяющееся меню производителей
-    const [mnfctDropdown, setMnfctDropdown] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    function handleMnfctDropdown() {
-        setMnfctDropdown((prevValue) => {
-            if (dropdownRef.current) {
-                if (!prevValue) {
-                    dropdownRef.current.style.height = `${
-                        filteredMnfctrs.length * 21
-                    }px`;
-                } else {
-                    dropdownRef.current.style.height = '84px';
-                }
-            }
-            return !prevValue;
-        });
-    }
-
-    const [filtersDropdown, setFiltersDropdown] = useState(false);
-    const filtersDropdownRef = useRef<HTMLDivElement>(null);
-
-    const filterDropdownClass = filtersDropdown
-        ? `${cl.filterDropdown} ${cl.filterDropdownActive}`
-        : cl.filterDropdown;
-
-    function handleFilterDropdown() {
-        setFiltersDropdown((prevValue) => {
-            if (dropdownRef.current && mnfctDropdown) {
-                dropdownRef.current.style.height = '84px';
-                setMnfctDropdown(false);
-            }
-            if (filtersDropdownRef.current) {
-                if (!prevValue) {
-                    filtersDropdownRef.current.style.height = '846px';
-                } else {
-                    filtersDropdownRef.current.style.height = '0';
-                }
-            }
-            return !prevValue;
-        });
-    }
-
+    //изменение пагинации в зависимости от размера окна
     useEffect(() => {
         const mediaQueryListNotebook = window.matchMedia('(max-width: 1499px)');
-        const mediaQueryListTablet = window.matchMedia(
-            '(max-width: 1023.98px)'
-        );
+        const mediaQueryListTablet = window.matchMedia('(max-width: 1023.98px)');
         const mediaQueryListMobile = window.matchMedia('(max-width: 615px)');
         adaptPagination();
         function adaptPagination() {
@@ -95,15 +44,14 @@ const Catalog = () => {
         mediaQueryListTablet.addEventListener('change', adaptPagination);
         mediaQueryListMobile.addEventListener('change', adaptPagination);
         return () => {
-            mediaQueryListNotebook.removeEventListener(
-                'change',
-                adaptPagination
-            );
+            mediaQueryListNotebook.removeEventListener('change', adaptPagination);
             mediaQueryListTablet.removeEventListener('change', adaptPagination);
             mediaQueryListMobile.removeEventListener('change', adaptPagination);
         };
     }, []);
 
+    //получение каталога из store (а там из localStorage)
+    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
     const catalogArr = useMemo(() => {
         return Array.from(catalogItems.values());
     }, [catalogItems]);
@@ -113,36 +61,73 @@ const Catalog = () => {
     const [mnfctQuery, setMnfctQuery] = useState('');
     const [minPrice, setMinPrice] = useState('0');
     const [maxPrice, setMaxPrice] = useState('99999');
-    const [filteredItems, setFilteredItems] = useState<ICatalogItem[]>([
+    const [priceMnfctfilteredItems, setPriceMnfctFilteredItems] = useState<ICatalogItem[]>([
         ...catalogArr,
     ]);
-    const manufacturersMap: Map<string, IManufacturerInfo> =
-        createManufacturerMap(catalogArr);
-    const {
-        manufacturers,
-        setManufacturers,
-        activeMnfct,
-        setActiveMnfct,
-        updateMnfctFlags,
-    } = useMnfctState(manufacturersMap);
+    const defaultMnfct: IManufacturerInfo[] = useMemo(() => {
+        return createMnfctrsArr([...items]);
+    }, [items]);
+    const { activeMnfct, setActiveMnfct, updateMnfctFlags } = useMnfctState();
     //состояние фильтра типа ухода
-    const careFiltersMap = new Map<string, ICareFilter>();
-    const defaultCareFilters = new CareFilters();
-    for (let filter in defaultCareFilters) {
-        careFiltersMap.set(filter, defaultCareFilters[filter]);
-    }
-    const { careFilters, activeCareFilters, updateCareFilter } =
-        useCareState(careFiltersMap);
+    const { activeCareFilters, setActiveCareFilters, updateCareFilter } = useCareState();
     //состояния сортировки
-    const [selectedSort, setSelectedSort] = useState('price');
+    const [sortType, setSortType] = useState('price');
     const [sortDirection, setSortDirection] = useState('ascend');
+    const sortTypeOptions = [
+        { value: 'price', name: 'Цена' },
+        { value: 'name', name: 'Название' },
+    ];
+    const sortDirectionOptions = [
+        { value: 'ascend', name: 'По возрастанию' },
+        { value: 'descend', name: 'По убыванию' },
+    ];
+    //расширяющийся список производителей и фильтров (при мобильной стилизации)
+    const [mnfctExpandList, setMnfctExpandList] = useState(false);
+    const mnfctExpandRef = useRef<HTMLDivElement>(null);
+
+    function handleMnfctExpand() {
+        setMnfctExpandList((prevValue) => {
+            if (mnfctExpandRef.current) {
+                if (!prevValue) {
+                    mnfctExpandRef.current.style.height = `${filteredMnfctrs.length * 21}px`;
+                } else {
+                    mnfctExpandRef.current.style.height = '84px';
+                }
+            }
+            return !prevValue;
+        });
+    }
+    //расширение меню фильтров (при мобильной стилизации)
+    const [filtersExpandMenu, setFiltersExpandMenu] = useState(false);
+    const filtersExpandRef = useRef<HTMLDivElement>(null);
+
+    const filtersExpandClass = filtersExpandMenu
+        ? `${cl.filterDropdown} ${cl.filterDropdownActive}`
+        : cl.filterDropdown;
+
+    function handleFilterExpand() {
+        setFiltersExpandMenu((prevValue) => {
+            if (mnfctExpandRef.current && mnfctExpandList) {
+                mnfctExpandRef.current.style.height = '84px';
+                setMnfctExpandList(false);
+            }
+            if (filtersExpandRef.current) {
+                if (!prevValue) {
+                    filtersExpandRef.current.style.height = '846px';
+                } else {
+                    filtersExpandRef.current.style.height = '0';
+                }
+            }
+            return !prevValue;
+        });
+    }
 
     //фильтр списка производителей
     const filteredMnfctrs = useMemo(() => {
-        return Array.from(manufacturers.values()).filter((mnfct) =>
+        return defaultMnfct.filter((mnfct) =>
             mnfct.name.toLowerCase().includes(mnfctQuery.toLowerCase())
         );
-    }, [mnfctQuery, manufacturers]);
+    }, [mnfctQuery]);
 
     //управление компонентами промежутка цен
     const handleMinPriceBlur = () => {
@@ -198,9 +183,9 @@ const Catalog = () => {
     };
 
     const clearFilters = () => {
-        setFilteredItems([...items]);
-        setManufacturers(manufacturersMap);
+        setPriceMnfctFilteredItems([...catalogArr]);
         setActiveMnfct(new Set<string>());
+        setActiveCareFilters(new Set<string>());
         setMinPrice('0');
         setMaxPrice('99999');
         setMnfctQuery('');
@@ -209,21 +194,17 @@ const Catalog = () => {
     const filterByPriceRangeAndMnfct = () => {
         let filter1 = sortByPriceRange([...items]);
         let filter2 = sortByManufacturer(filter1);
-        setFilteredItems(filter2);
+        setPriceMnfctFilteredItems(filter2);
     };
 
     //фильтр по типу ухода - возвращает второй фильтр
     const filteredByCare: ICatalogItem[] = useCareFilter(
-        filteredItems,
+        priceMnfctfilteredItems,
         activeCareFilters
     );
 
     //сортировка по цене, названию, их направлению - последний шаг перед рендером
-    const filteredByNamePrice: ICatalogItem[] = useSort(
-        filteredByCare,
-        selectedSort,
-        sortDirection
-    );
+    const filteredByNamePrice: ICatalogItem[] = useSort(filteredByCare, sortType, sortDirection);
 
     return (
         <main className={cl.catalog}>
@@ -241,27 +222,21 @@ const Catalog = () => {
                         <div className={cl.sort}>
                             Сортировка:
                             <Select
-                                value={selectedSort}
-                                onChange={(sort) => setSelectedSort(sort)}
-                                options={[
-                                    { value: 'price', name: 'Цена' },
-                                    { value: 'name', name: 'Название' },
-                                ]}
+                                value={sortType}
+                                onChange={(sort) => setSortType(sort)}
+                                options={sortTypeOptions}
                                 className={cl.select}
                             />
                             <Select
                                 value={sortDirection}
                                 onChange={(sort) => setSortDirection(sort)}
-                                options={[
-                                    { value: 'ascend', name: 'По возрастанию' },
-                                    { value: 'descend', name: 'По убыванию' },
-                                ]}
+                                options={sortDirectionOptions}
                                 className={cl.select}
                             />
                         </div>
                     )}
                     <List
-                        items={Array.from(careFilters.values())}
+                        items={defaultCareFiltersArr}
                         renderItem={(item: ICareFilter) => {
                             return (
                                 <CareFilter
@@ -269,7 +244,11 @@ const Catalog = () => {
                                     onClick={updateCareFilter}
                                     className={cl.careTypeTop__item}
                                     key={item.type}
-                                    active={cl.careTypeTop__item_active}
+                                    activeClass={
+                                        activeCareFilters.has(item.type)
+                                            ? cl.careTypeTop__item_active
+                                            : ''
+                                    }
                                 />
                             );
                         }}
@@ -281,25 +260,19 @@ const Catalog = () => {
                         <h5 className={cl.filters__title}>
                             ПОДБОР ПО ПАРАМЕТРАМ{' '}
                             {mobile && (
-                                <div
-                                    className={filterDropdownClass}
-                                    onClick={handleFilterDropdown}
-                                >
+                                <div className={filtersExpandClass} onClick={handleFilterExpand}>
                                     <div></div>
                                 </div>
                             )}
                         </h5>
-                        <div
-                            className={cl.filters__container}
-                            ref={filtersDropdownRef}
-                        >
+                        <div className={cl.filters__container} ref={filtersExpandRef}>
                             <div className={cl.filters__price}>
                                 <label>
                                     Цена <strong>₸</strong>
                                 </label>
                                 <div className={cl.price__inputs}>
                                     <input
-                                        type="number"
+                                        type='number'
                                         min={0}
                                         max={9999999}
                                         value={minPrice}
@@ -308,8 +281,7 @@ const Catalog = () => {
                                     />{' '}
                                     -
                                     <input
-                                        type="number"
-                                        name="price"
+                                        type='number'
                                         min={1}
                                         max={9999999}
                                         value={maxPrice}
@@ -322,42 +294,27 @@ const Catalog = () => {
                                 <label>Производитель</label>
                                 <div className={`${cl.search} ${cl.input}`}>
                                     <input
-                                        type="text"
-                                        placeholder="Поиск..."
+                                        type='text'
+                                        placeholder='Поиск...'
                                         value={mnfctQuery}
-                                        onChange={(e) =>
-                                            setMnfctQuery(e.target.value)
-                                        }
+                                        onChange={(e) => setMnfctQuery(e.target.value)}
                                     />
                                     <button>
-                                        <img
-                                            src="images/header/search.svg"
-                                            alt="Поиск"
-                                        />
+                                        <img src='images/header/search.svg' alt='Поиск' />
                                     </button>
                                 </div>
-                                <div
-                                    className={cl.mnfct__list}
-                                    ref={dropdownRef}
-                                >
+                                <div className={cl.mnfct__list} ref={mnfctExpandRef}>
                                     {filteredMnfctrs.length !== 0 ? (
                                         <List
                                             items={filteredMnfctrs}
-                                            renderItem={(
-                                                item: IManufacturerInfo
-                                            ) => {
+                                            renderItem={(item: IManufacturerInfo) => {
                                                 return (
                                                     <Checkbox
                                                         item={item}
-                                                        onChange={
-                                                            updateMnfctFlags
-                                                        }
-                                                        checked={item.checked}
+                                                        onChange={updateMnfctFlags}
+                                                        checked={activeMnfct.has(item.name)}
                                                         key={item.name}
-                                                        className={
-                                                            cl.mnfct__item
-                                                        }
-                                                    >
+                                                        className={cl.mnfct__item}>
                                                         {item.name}
                                                         <span>{`(${item.amount})`}</span>
                                                     </Checkbox>
@@ -365,62 +322,37 @@ const Catalog = () => {
                                             }}
                                         />
                                     ) : (
-                                        <div className={cl.nomatch_mnfct}>
-                                            Нет совпадений
-                                        </div>
+                                        <div className={cl.nomatch_mnfct}>Нет совпадений</div>
                                     )}
                                 </div>
-                                <button
-                                    className={cl.showAll}
-                                    onClick={handleMnfctDropdown}
-                                >
+                                <button className={cl.showAll} onClick={handleMnfctExpand}>
                                     {filteredMnfctrs.length > 4 && (
                                         <div>
-                                            {mnfctDropdown ? (
-                                                <div
-                                                    className={
-                                                        cl.showAll__container
-                                                    }
-                                                >
+                                            {mnfctExpandList ? (
+                                                <div className={cl.showAll__container}>
                                                     Скрыть
-                                                    <div
-                                                        className={cl.arrow_up}
-                                                    ></div>
+                                                    <div className={cl.arrow_up}></div>
                                                 </div>
                                             ) : (
-                                                <div
-                                                    className={
-                                                        cl.showAll__container
-                                                    }
-                                                >
+                                                <div className={cl.showAll__container}>
                                                     Показать все
-                                                    <div
-                                                        className={
-                                                            cl.arrow_down
-                                                        }
-                                                    ></div>
+                                                    <div className={cl.arrow_down}></div>
                                                 </div>
                                             )}
                                         </div>
                                     )}
                                 </button>
                                 <div className={cl.filters__applyDelete}>
-                                    <button
-                                        className={cl.btn}
-                                        onClick={filterByPriceRangeAndMnfct}
-                                    >
+                                    <button className={cl.btn} onClick={filterByPriceRangeAndMnfct}>
                                         Показать
                                     </button>
-                                    <button
-                                        className={cl.btn}
-                                        onClick={clearFilters}
-                                    >
-                                        <img src="images/trash.svg" />
+                                    <button className={cl.btn} onClick={clearFilters}>
+                                        <img src='images/trash.svg' />
                                     </button>
                                 </div>
                             </div>
                             <List
-                                items={Array.from(careFilters.values())}
+                                items={defaultCareFiltersArr}
                                 renderItem={(item: ICareFilter) => {
                                     return (
                                         <CareFilter
@@ -428,8 +360,10 @@ const Catalog = () => {
                                             filter={item}
                                             className={cl.careTypeLeft__item}
                                             key={item.type}
-                                            active={
-                                                cl.careTypeLeft__item_active
+                                            activeClass={
+                                                activeCareFilters.has(item.type)
+                                                    ? cl.careTypeLeft__item_active
+                                                    : ''
                                             }
                                         />
                                     );
@@ -442,21 +376,15 @@ const Catalog = () => {
                         <div className={cl.sort}>
                             <div className={cl.sort__title}>Сортировка:</div>
                             <Select
-                                value={selectedSort}
-                                onChange={(sort) => setSelectedSort(sort)}
-                                options={[
-                                    { value: 'price', name: 'Цена' },
-                                    { value: 'name', name: 'Название' },
-                                ]}
+                                value={sortType}
+                                onChange={(sort) => setSortType(sort)}
+                                options={sortTypeOptions}
                                 className={cl.select}
                             />
                             <Select
                                 value={sortDirection}
                                 onChange={(sort) => setSortDirection(sort)}
-                                options={[
-                                    { value: 'ascend', name: 'По возрастанию' },
-                                    { value: 'descend', name: 'По убыванию' },
-                                ]}
+                                options={sortDirectionOptions}
                                 className={cl.select}
                             />
                         </div>
@@ -466,9 +394,7 @@ const Catalog = () => {
                             items={filteredByNamePrice}
                             itemsPerPage={itemsPerPage}
                             renderItem={(item: ICatalogItem) => {
-                                return (
-                                    <CatalogItem item={item} key={item.code} />
-                                );
+                                return <CatalogItem item={item} key={item.code} />;
                             }}
                             className={cl.catalog__items}
                         />

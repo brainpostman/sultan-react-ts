@@ -4,22 +4,12 @@ interface ICareFilterProps {
     filter: ICareFilter;
     onClick: (type: string) => void;
     className?: string;
-    active?: string;
+    activeClass?: string;
 }
 
-const CareFilter = ({
-    filter,
-    onClick,
-    className,
-    active,
-}: ICareFilterProps) => {
-    const activeClass = filter.checked ? `${active} ` : '';
-
+const CareFilter = ({ filter, onClick, className, activeClass }: ICareFilterProps) => {
     return (
-        <div
-            className={`${activeClass}${className}`}
-            onClick={() => onClick(filter.type)}
-        >
+        <div className={`${className} ${activeClass}`} onClick={() => onClick(filter.type)}>
             {filter.value}
         </div>
     );

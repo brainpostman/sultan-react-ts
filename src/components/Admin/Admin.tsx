@@ -1,11 +1,6 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import {
-    ICareFilter,
-    ICatalogItem,
-    CareFilters,
-    CatalogItem,
-} from '../../types/catalogItem';
+import { ICareFilter, ICatalogItem, CatalogItem } from '../../types/catalogItem';
 import List from '../UI/List';
 import cl from './Admin.module.scss';
 import useCareFilter from '../../hooks/useCareFilter';
@@ -23,29 +18,21 @@ import Modal from '../UI/Modal/Modal';
 import { createCatalogMap } from '../../utils/createCatalogMap';
 import ItemEditModal from './ItemEditModal/ItemEditModal';
 import useItemFieldFilter from '../../hooks/useItemFieldFilter';
+import { createCareFiltersArr } from '../../utils/createCareFiltersArr';
 
 const Admin = () => {
-    const [showSaveModal, setShowSaveModal] = useState(false);
     const { items: catalogItems } = useTypedSelector((state) => state.catalog);
     const dispatch = useDispatch();
+
     const [catalogMap, setCatalogMap] = useState<Map<string, ICatalogItem>>(
         deepCopyMap(catalogItems)
     );
-    const careFiltersMap = new Map<string, ICareFilter>();
-    const defaultCareFilters = new CareFilters();
-    for (let filter in defaultCareFilters) {
-        careFiltersMap.set(filter, defaultCareFilters[filter]);
-    }
-
-    const [showAddModal, setShowAddModal] = useState(false);
-
-    const [newItemCareFilterState, setNewItemCareFilterState] = useState<
-        Map<string, ICareFilter>
-    >(deepCopyMap(careFiltersMap));
-
     let catalogArr: ICatalogItem[] = useMemo(() => {
         return Array.from(catalogMap.values());
     }, [catalogMap]);
+
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showSaveModal, setShowSaveModal] = useState(false);
 
     const handleDelete = (itemCode: string) => {
         let tempMap = deepCopyMap(catalogMap);
@@ -97,7 +84,7 @@ const Admin = () => {
             setter: setDescrQuery,
         },
     ];
-
+    //фильтр полей товаров
     const filteredByItemFields = useItemFieldFilter(
         nameQuery,
         codeQuery,
@@ -108,11 +95,19 @@ const Admin = () => {
     );
 
     //состояние фильтра типа ухода
-    const { careFilters, activeCareFilters, updateCareFilter } =
-        useCareState(careFiltersMap);
+    const defaultCareFilters: ICareFilter[] = createCareFiltersArr();
+    const { activeCareFilters, setActiveCareFilters, updateCareFilter } = useCareState();
     //состояния сортировки
     const [selectedSort, setSelectedSort] = useState('price');
     const [sortDirection, setSortDirection] = useState('ascend');
+    const sortTypeOptions = [
+        { value: 'price', name: 'Цена' },
+        { value: 'name', name: 'Название' },
+    ];
+    const sortDirectionOptions = [
+        { value: 'ascend', name: 'По возрастанию' },
+        { value: 'descend', name: 'По убыванию' },
+    ];
 
     //управление компонентами промежутка цен
     const handleMinPriceBlur = () => {
@@ -156,10 +151,7 @@ const Admin = () => {
     }, [minPrice, maxPrice, filteredByItemFields]);
 
     //фильтр по типу ухода - возвращает второй фильтр
-    const filteredByCare: ICatalogItem[] = useCareFilter(
-        filteredByPriceRange,
-        activeCareFilters
-    );
+    const filteredByCare: ICatalogItem[] = useCareFilter(filteredByPriceRange, activeCareFilters);
 
     //сортировка по цене, названию, их направлению - последний шаг перед рендером
     const filteredByNamePrice: ICatalogItem[] = useSort(
@@ -181,24 +173,18 @@ const Admin = () => {
                         <Select
                             value={selectedSort}
                             onChange={(sort) => setSelectedSort(sort)}
-                            options={[
-                                { value: 'price', name: 'Цена' },
-                                { value: 'name', name: 'Название' },
-                            ]}
+                            options={sortTypeOptions}
                             className={cl.select}
                         />
                         <Select
                             value={sortDirection}
                             onChange={(sort) => setSortDirection(sort)}
-                            options={[
-                                { value: 'ascend', name: 'По возрастанию' },
-                                { value: 'descend', name: 'По убыванию' },
-                            ]}
+                            options={sortDirectionOptions}
                             className={cl.select}
                         />
                     </div>
                     <List
-                        items={Array.from(careFilters.values())}
+                        items={defaultCareFilters}
                         renderItem={(item: ICareFilter) => {
                             return (
                                 <CareFilter
@@ -206,7 +192,11 @@ const Admin = () => {
                                     onClick={updateCareFilter}
                                     className={cl.careTypeTop__item}
                                     key={item.type}
-                                    active={cl.careTypeTop__item_active}
+                                    activeClass={
+                                        activeCareFilters.has(item.type)
+                                            ? cl.careTypeTop__item_active
+                                            : ''
+                                    }
                                 />
                             );
                         }}
@@ -215,16 +205,14 @@ const Admin = () => {
                 </section>
                 <section className={cl.catalog__itemsAndFilters}>
                     <div className={cl.filters}>
-                        <h5 className={cl.filters__title}>
-                            ПОДБОР ПО ПАРАМЕТРАМ
-                        </h5>
+                        <h5 className={cl.filters__title}>ПОДБОР ПО ПАРАМЕТРАМ</h5>
                         <div className={cl.filters__price}>
                             <label>
                                 Цена <strong>₸</strong>
                             </label>
                             <div className={cl.price__inputs}>
                                 <input
-                                    type="number"
+                                    type='number'
                                     min={0}
                                     max={9999999}
                                     value={minPrice}
@@ -233,7 +221,7 @@ const Admin = () => {
                                 />{' '}
                                 -
                                 <input
-                                    type="number"
+                                    type='number'
                                     min={1}
                                     max={9999999}
                                     value={maxPrice}
@@ -247,31 +235,19 @@ const Admin = () => {
                             className={cl.filtersContainer}
                             renderItem={(item) => {
                                 return (
-                                    <div
-                                        className={cl.container}
-                                        key={item.fieldName}
-                                    >
-                                        <label className={cl.filter}>
-                                            {item.fieldName}
-                                        </label>
-                                        <div
-                                            className={`${cl.search} ${cl.input}`}
-                                        >
+                                    <div className={cl.container} key={item.fieldName}>
+                                        <label className={cl.filter}>{item.fieldName}</label>
+                                        <div className={`${cl.search} ${cl.input}`}>
                                             <input
                                                 value={item.value}
                                                 onChange={(event) =>
-                                                    item.setter(
-                                                        event.target.value
-                                                    )
+                                                    item.setter(event.target.value)
                                                 }
-                                                type="text"
-                                                placeholder="Поиск..."
+                                                type='text'
+                                                placeholder='Поиск...'
                                             />
                                             <button>
-                                                <img
-                                                    src="images/header/search.svg"
-                                                    alt="Поиск"
-                                                />
+                                                <img src='images/header/search.svg' alt='Поиск' />
                                             </button>
                                         </div>
                                     </div>
@@ -283,24 +259,17 @@ const Admin = () => {
                                 className={cl.btn}
                                 onClick={() => {
                                     setShowAddModal(true);
-                                }}
-                            >
+                                }}>
                                 Добавить товар
                             </button>
                             <button
                                 className={cl.btn}
                                 onClick={() => {
-                                    setCatalogMap(
-                                        new Map<string, ICatalogItem>()
-                                    );
-                                }}
-                            >
+                                    setCatalogMap(new Map<string, ICatalogItem>());
+                                }}>
                                 Очистить каталог
                             </button>
-                            <button
-                                className={cl.btn}
-                                onClick={saveCatalogChanges}
-                            >
+                            <button className={cl.btn} onClick={saveCatalogChanges}>
                                 Сохранить изменения
                             </button>
                         </div>
@@ -324,20 +293,11 @@ const Admin = () => {
                 </section>
             </div>
             {showSaveModal && (
-                <Modal
-                    className={cl.modalbg}
-                    onClick={() => setShowSaveModal(false)}
-                >
-                    <div
-                        className={cl.modal}
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        <div
-                            className={cl.close}
-                            onClick={() => setShowSaveModal(false)}
-                        ></div>
+                <Modal className={cl.modalbg} onClick={() => setShowSaveModal(false)}>
+                    <div className={cl.modal} onClick={(event) => event.stopPropagation()}>
+                        <div className={cl.close} onClick={() => setShowSaveModal(false)}></div>
                         <div className={cl.modalcheck}>
-                            <img src="images/double-check.svg" />
+                            <img src='images/double-check.svg' />
                         </div>
                         <h3>ИЗМЕНЕНИЯ СОХРАНЕНЫ</h3>
                     </div>
@@ -347,13 +307,7 @@ const Admin = () => {
                 <ItemEditModal
                     item={new CatalogItem()}
                     setIsRedacting={setShowAddModal}
-                    defaultCareFilters={deepCopyMap(careFiltersMap)}
-                    careFilterState={newItemCareFilterState}
-                    setCareFilterState={setNewItemCareFilterState}
-                    saveChanges={(
-                        newCode: string,
-                        newItemProps: ICatalogItem
-                    ) => {
+                    saveChanges={(newCode: string, newItemProps: ICatalogItem) => {
                         const tempMap = deepCopyMap(catalogMap);
                         tempMap.set(newCode, newItemProps);
                         setShowAddModal(false);

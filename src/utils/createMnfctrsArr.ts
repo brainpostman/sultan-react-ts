@@ -1,8 +1,6 @@
 import { IManufacturerInfo, ICatalogItem } from '../types/catalogItem';
 
-export function createManufacturerMap(
-    catalog: ICatalogItem[]
-): Map<string, IManufacturerInfo> {
+export function createMnfctrsArr(catalog: ICatalogItem[]): IManufacturerInfo[] {
     const tempMap = new Map<string, number>();
 
     for (let item of catalog) {
@@ -13,11 +11,11 @@ export function createManufacturerMap(
         }
     }
 
-    const manufacturersMap = new Map<string, IManufacturerInfo>();
+    const manufacturersArr: IManufacturerInfo[] = [];
 
     for (let [name, amount] of tempMap.entries()) {
-        manufacturersMap.set(name, { name, amount, checked: false });
+        manufacturersArr.push({ name, amount });
     }
 
-    return manufacturersMap;
+    return manufacturersArr;
 }

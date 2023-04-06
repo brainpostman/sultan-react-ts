@@ -1,45 +1,25 @@
 import { useState } from 'react';
-import {
-    ICareFilter,
-    ICareTypes,
-    ICatalogItem,
-} from '../../../types/catalogItem';
-import deepCopyMap from '../../../utils/deepCopyMap';
+import { ICareFilter, ICatalogItem } from '../../../types/catalogItem';
 import Checkbox from '../../UI/Checkbox/Checkbox';
 import List from '../../UI/List';
 import Modal from '../../UI/Modal/Modal';
 import cl from './ItemEditModal.module.scss';
+import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
 
 interface IItemEditModal {
     item: ICatalogItem;
     setIsRedacting: (value: React.SetStateAction<boolean>) => void;
-    defaultCareFilters: Map<string, ICareFilter>;
-    careFilterState: Map<string, ICareFilter>;
-    setCareFilterState: (
-        value: React.SetStateAction<Map<string, ICareFilter>>
-    ) => void;
     saveChanges: (newCode: string, newItemProps: ICatalogItem) => void;
 }
 
-const ItemEditModal = ({
-    item,
-    setIsRedacting,
-    defaultCareFilters,
-    careFilterState,
-    setCareFilterState,
-    saveChanges,
-}: IItemEditModal) => {
+const ItemEditModal = ({ item, setIsRedacting, saveChanges }: IItemEditModal) => {
     const [newItemProps, setNewItemProps] = useState<ICatalogItem>({
         ...item,
         types: { ...item.types },
     });
     const [amountInput, setAmountInput] = useState(String(item.amount));
-    const [priceIntInput, setPriceIntInput] = useState(
-        String(Math.trunc(item.price))
-    );
-    const [priceDecInput, setPriceDecInput] = useState(
-        String(item.price).split('.')[1] || '0'
-    );
+    const [priceIntInput, setPriceIntInput] = useState(String(Math.trunc(item.price)));
+    const [priceDecInput, setPriceDecInput] = useState(String(item.price).split('.')[1] || '0');
     const [codeInput, setCodeInput] = useState(item.code);
 
     const handleCodeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,34 +33,12 @@ const ItemEditModal = ({
         }
     };
 
-    const reduceFilters = (careMap: Map<string, ICareFilter>) => {
-        let newCareTypes: ICareTypes = {
-            body: false,
-            hands: false,
-            legs: false,
-            face: false,
-            hair: false,
-            suntan: false,
-            shave: false,
-            gift: false,
-            hygiene: false,
-            mouth: false,
-            paper: false,
-        };
-        for (let [key, value] of careMap) {
-            newCareTypes[key] = value.checked;
-        }
-        return newCareTypes;
-    };
-
     const updateFilterFlags = (item: ICareFilter) => {
         let key = item.type;
-        const careMap = deepCopyMap(careFilterState);
-        let filter = careMap.get(key);
-        if (filter) filter.checked = !filter.checked;
-        setCareFilterState(careMap);
         setNewItemProps((prevProps) => {
-            return { ...prevProps, types: reduceFilters(careMap) };
+            let types = prevProps.types;
+            types[key] = !types[key];
+            return { ...prevProps, types };
         });
     };
 
@@ -104,7 +62,6 @@ const ItemEditModal = ({
     };
 
     const cancelChanges = () => {
-        setCareFilterState(defaultCareFilters);
         setCodeInput(item.code);
         setNewItemProps({ ...item, types: { ...item.types } });
         setAmountInput(String(item.amount));
@@ -131,10 +88,10 @@ const ItemEditModal = ({
     return (
         <Modal onClick={cancelChanges}>
             <div className={cl.redactForm} onClick={(e) => e.stopPropagation()}>
-                <label className={cl.name}>
+                <div className={cl.name}>
                     Название:{' '}
                     <input
-                        type="text"
+                        type='text'
                         value={newItemProps.name}
                         onChange={(e) =>
                             setNewItemProps((prevProps) => {
@@ -145,11 +102,11 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.unit}>
+                </div>
+                <div className={cl.unit}>
                     URL изображения:{' '}
                     <input
-                        type="text"
+                        type='text'
                         value={newItemProps.img}
                         onChange={(e) =>
                             setNewItemProps((prevProps) => {
@@ -160,11 +117,11 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.unit}>
+                </div>
+                <div className={cl.unit}>
                     Единица измерения:{' '}
                     <input
-                        type="text"
+                        type='text'
                         value={newItemProps.unit}
                         onChange={(e) =>
                             setNewItemProps((prevProps) => {
@@ -175,32 +132,25 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.amount}>
+                </div>
+                <div className={cl.amount}>
                     Количество:{' '}
                     <input
-                        type="number"
+                        type='number'
                         min={1}
                         max={99999}
                         value={amountInput}
-                        onChange={(e) =>
-                            handlePositiveNumChange(e, setAmountInput)
-                        }
+                        onChange={(e) => handlePositiveNumChange(e, setAmountInput)}
                         onBlur={saveAmount}
                     />
-                </label>
-                <label className={cl.code}>
-                    Штрихкод:{' '}
-                    <input
-                        type="text"
-                        value={codeInput}
-                        onInput={handleCodeInput}
-                    />
-                </label>
-                <label className={cl.mnfct}>
+                </div>
+                <div className={cl.code}>
+                    Штрихкод: <input type='text' value={codeInput} onInput={handleCodeInput} />
+                </div>
+                <div className={cl.mnfct}>
                     Производитель:{' '}
                     <input
-                        type="text"
+                        type='text'
                         value={newItemProps.mnfct}
                         onChange={(e) =>
                             setNewItemProps((prevProps) => {
@@ -211,11 +161,11 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.brand}>
+                </div>
+                <div className={cl.brand}>
                     Бренд:{' '}
                     <input
-                        type="text"
+                        type='text'
                         value={newItemProps.brand}
                         onChange={(e) =>
                             setNewItemProps((prevProps) => {
@@ -226,8 +176,8 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.descr}>
+                </div>
+                <div className={cl.descr}>
                     <span> Описание:</span>
                     <textarea
                         value={newItemProps.descr}
@@ -240,56 +190,48 @@ const ItemEditModal = ({
                             })
                         }
                     />
-                </label>
-                <label className={cl.price}>
+                </div>
+                <div className={cl.price}>
                     Цена:{' '}
                     <input
-                        type="number"
+                        type='number'
                         value={priceIntInput}
-                        onChange={(e) =>
-                            handlePositiveNumChange(e, setPriceIntInput)
-                        }
+                        onChange={(e) => handlePositiveNumChange(e, setPriceIntInput)}
                         onBlur={savePrice}
                     />
                     .
                     <input
-                        type="number"
+                        type='number'
                         maxLength={2}
                         value={priceDecInput}
-                        onChange={(e) =>
-                            handlePositiveNumChange(e, setPriceDecInput)
-                        }
+                        onChange={(e) => handlePositiveNumChange(e, setPriceDecInput)}
                         onBlur={savePrice}
                     />
-                </label>
-                <label>
+                </div>
+                <div>
                     <div className={cl.careTypes}>Типы ухода:</div>
                     <List
-                        items={Array.from(careFilterState.values())}
-                        renderItem={(item: ICareFilter) => {
+                        items={defaultCareFiltersArr}
+                        renderItem={(filter: ICareFilter) => {
                             return (
                                 <Checkbox
-                                    item={item}
+                                    item={filter}
                                     onChange={updateFilterFlags}
-                                    checked={item.checked}
-                                    key={item.type}
-                                    className={cl.careTypes__item}
-                                >
-                                    {item.value}
+                                    checked={newItemProps.types[filter.type]}
+                                    key={filter.type}
+                                    className={cl.careTypes__item}>
+                                    {filter.value}
                                 </Checkbox>
                             );
                         }}
                         className={cl.careTypes}
                     />
-                </label>
+                </div>
                 <div className={cl.formControls}>
                     <button onClick={cancelChanges} className={cl.btn}>
                         Отменить
                     </button>
-                    <button
-                        onClick={() => saveChanges(codeInput, newItemProps)}
-                        className={cl.btn}
-                    >
+                    <button onClick={() => saveChanges(codeInput, newItemProps)} className={cl.btn}>
                         Сохранить
                     </button>
                 </div>

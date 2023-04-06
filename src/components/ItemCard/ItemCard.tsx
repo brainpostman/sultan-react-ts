@@ -82,6 +82,28 @@ const ItemCard = () => {
         }
     };
 
+    const [descrExpanded, setDescrExpanded] = useState(false);
+    const descrExpandRef = useRef<HTMLParagraphElement>(null);
+    const [specsExpanded, setSpecsExpanded] = useState(false);
+    const specsExpandRef = useRef<HTMLDivElement>(null);
+
+    function handleExpand<T extends HTMLElement>(
+        setState: React.Dispatch<React.SetStateAction<boolean>>,
+        expandElementRef: React.RefObject<T>
+    ) {
+        setState((prevValue) => {
+            if (expandElementRef.current) {
+                if (!prevValue) {
+                    expandElementRef.current.style.height =
+                        expandElementRef.current.scrollHeight + 'px';
+                } else {
+                    expandElementRef.current.style.height = '0';
+                }
+            }
+            return !prevValue;
+        });
+    }
+
     return (
         <main className={cl.itemcard}>
             <div className={cl.container}>
@@ -185,54 +207,63 @@ const ItemCard = () => {
                             </p>
                         </div>
                         <div className={cl.description}>
-                            <h3>Описание:</h3>
-                            <p>{item.descr}</p>
+                            <h3 onClick={() => handleExpand(setDescrExpanded, descrExpandRef)}>
+                                Описание{' '}
+                                <div className={descrExpanded ? cl.arrow_up : cl.arrow_down}></div>
+                            </h3>
+                            <p ref={descrExpandRef}>{item.descr}</p>
                         </div>
+
                         <div className={cl.specifications}>
-                            <h3>Характеристики:</h3>
-                            <p>
-                                Типы ухода:{' '}
-                                <span>
-                                    {defaultCareFiltersArr
-                                        .filter((filter) => {
-                                            return item.types[filter.type];
-                                        })
-                                        .map((filter) => {
-                                            return filter.value.toLowerCase();
-                                        })
-                                        .join(', ')}
-                                </span>
-                            </p>
-                            <p>
-                                Назначение: <span>{item.code}</span>
-                            </p>
-                            <p>
-                                Тип: <span>{item.code}</span>
-                            </p>
-                            <p>
-                                Производитель: <span>{item.mnfct}</span>
-                            </p>
-                            <p>
-                                Бренд: <span>{item.brand}</span>
-                            </p>
-                            <p>
-                                Артикул: <span>{item.code}</span>
-                            </p>
-                            <p>
-                                Штрихкод: <span>{item.code}</span>
-                            </p>
-                            <p>
-                                {`${
-                                    item.unit === 'мл'
-                                        ? 'Объем: '
-                                        : item.unit === 'г'
-                                        ? 'Вес: '
-                                        : 'Количество: '
-                                }`}
-                                <span>
-                                    {item.amount} {item.unit}
-                                </span>
-                            </p>
+                            <h3 onClick={() => handleExpand(setSpecsExpanded, specsExpandRef)}>
+                                Характеристики{' '}
+                                <div className={specsExpanded ? cl.arrow_up : cl.arrow_down}></div>
+                            </h3>
+                            <div className={cl.specifications__container} ref={specsExpandRef}>
+                                <p>
+                                    Типы ухода:{' '}
+                                    <span>
+                                        {defaultCareFiltersArr
+                                            .filter((filter) => {
+                                                return item.types[filter.type];
+                                            })
+                                            .map((filter) => {
+                                                return filter.value.toLowerCase();
+                                            })
+                                            .join(', ')}
+                                    </span>
+                                </p>
+                                <p>
+                                    Назначение: <span>{item.code}</span>
+                                </p>
+                                <p>
+                                    Тип: <span>{item.code}</span>
+                                </p>
+                                <p>
+                                    Производитель: <span>{item.mnfct}</span>
+                                </p>
+                                <p>
+                                    Бренд: <span>{item.brand}</span>
+                                </p>
+                                <p>
+                                    Артикул: <span>{item.code}</span>
+                                </p>
+                                <p>
+                                    Штрихкод: <span>{item.code}</span>
+                                </p>
+                                <p>
+                                    {`${
+                                        item.unit === 'мл'
+                                            ? 'Объем: '
+                                            : item.unit === 'г'
+                                            ? 'Вес: '
+                                            : 'Количество: '
+                                    }`}
+                                    <span>
+                                        {item.amount} {item.unit}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </section>

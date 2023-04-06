@@ -201,16 +201,23 @@
 .description {
     margin-bottom: 10px;
     & h3 {
+        width: fit-content;
+        padding-right: 12px;
         font-weight: 500;
         font-size: 16px;
         line-height: 1.5;
         margin-bottom: 15px;
+        position: relative;
+        cursor: pointer;
     }
     & p {
+        height: 0;
+        overflow: hidden;
         font-weight: 300;
         font-size: 12px;
         line-height: 1.5;
         color: $color_gray;
+        transition: height 300ms ease-in-out;
     }
 }
 
@@ -218,10 +225,14 @@
     padding-top: 10px;
     border-top: 1px dashed rgba(63, 78, 101, 0.3);
     & h3 {
+        width: fit-content;
+        padding-right: 12px;
         font-weight: 500;
         font-size: 16px;
         line-height: 1.5;
         margin-bottom: 15px;
+        position: relative;
+        cursor: pointer;
     }
     & p {
         font-weight: 300;
@@ -234,6 +245,35 @@
         font-weight: 500;
         color: $color_black;
     }
+    &__container {
+        height: 0;
+        overflow: hidden;
+        transition: height 300ms ease-in-out;
+    }
+}
+
+.arrow_down {
+    z-index: -1;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 3px solid transparent;
+    border-bottom: 0;
+    border-top: 6px solid $color_gray;
+}
+
+.arrow_up {
+    z-index: -1;
+    position: absolute;
+    right: 0;
+    top: 40%;
+    width: 0;
+    height: 0;
+    border: 3px solid transparent;
+    border-top: 0;
+    border-bottom: 6px solid $color_gray;
 }
 
 @media (max-width: 1499px) {

@@ -440,7 +440,7 @@
 
     .menu {
         margin-top: 25px;
-        justify-content: flex-start;
+        max-height: 215px;
         &__title {
             display: block;
             margin-bottom: 25px;
@@ -467,6 +467,10 @@
         }
         &__column2 {
             display: none;
+        }
+
+        &__pricelist {
+            margin-bottom: 20px;
         }
     }
 

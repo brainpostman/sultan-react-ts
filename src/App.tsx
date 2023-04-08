@@ -19,7 +19,7 @@ function App() {
                     <Route path='catalog/*' element={<Catalog />} />
                     <Route path='catalog/:code' element={<ItemCard />} />
                     <Route path='cart' element={<Cart />} />
-                    <Route path='*' element={<Navigate to='/' replace />} />
+                    <Route path='*' element={<Navigate to='catalog' replace />} />
                     <Route path='admin' element={<Admin />} />
                 </Routes>
                 <Footer />

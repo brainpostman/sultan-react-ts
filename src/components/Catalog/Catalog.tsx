@@ -32,7 +32,7 @@ const Catalog = () => {
     const [mnfctQuery, setMnfctQuery] = useState('');
     const [minPrice, setMinPrice] = useState('0');
     const [maxPrice, setMaxPrice] = useState('99999');
-    const [priceMnfctfilteredItems, setPriceMnfctFilteredItems] = useState<ICatalogItem[]>([
+    const [priceMnfctFilteredItems, setPriceMnfctFilteredItems] = useState<ICatalogItem[]>([
         ...catalogArr,
     ]);
     const defaultMnfct: IManufacturerInfo[] = useMemo(() => {
@@ -177,7 +177,7 @@ const Catalog = () => {
 
     //фильтр по типу ухода - возвращает второй фильтр
     const filteredByCare: ICatalogItem[] = useCareFilter(
-        priceMnfctfilteredItems,
+        priceMnfctFilteredItems,
         activeCareFilters
     );
 

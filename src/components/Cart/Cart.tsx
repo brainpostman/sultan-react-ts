@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { emptyCart } from '../../store/action-creators/cartActions';
 import { ICartItem } from '../../types/cartItem';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import List from '../UI/List';
@@ -10,10 +7,13 @@ import cl from './Cart.module.scss';
 import CartItem from './CartItem.tsx/CartItem';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
+import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHooks';
+import { cartSlice } from '../../store/reducers/cartReducer';
 
 const Cart = () => {
-    const { items, sum } = useTypedSelector((state) => state.cart);
-    const dispatch = useDispatch();
+    const { items, sum } = useAppSelector((state) => state.cart);
+    const dispatch = useAppDispatch();
+    const { emptyCart } = cartSlice.actions;
     const [showModal, setShowModal] = useState(false);
     const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
 

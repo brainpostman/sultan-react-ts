@@ -13,7 +13,7 @@ import Select from '../UI/Select/Select';
 import CareFilter from './CareFilter';
 import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useAppSelector } from '../../hooks/ReduxHooks';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
 import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
@@ -22,7 +22,7 @@ const Catalog = () => {
     //флаг адаптивной стилизации
     const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
     //получение каталога из store (а там из localStorage)
-    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
+    const { items: catalogItems } = useAppSelector((state) => state.catalog);
     const catalogArr = useMemo(() => {
         return Array.from(catalogItems.values());
     }, [catalogItems]);

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useAppSelector } from '../../hooks/ReduxHooks';
 import cl from './Header.module.scss';
 import { useEffect, useState } from 'react';
 import useMobile from '../../hooks/useMobile';
 
 export default function Header() {
-    const { sum, quantity } = useTypedSelector((state) => state.cart);
+    const { sum, quantity } = useAppSelector((state) => state.cart);
     const [menuOpen, setMenuOpen] = useState(false);
     const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
     let burgerMenuClasses = `${cl.contacts__container}${menuOpen ? ' ' + cl.menuActive : ''}`;

@@ -1,28 +1,22 @@
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHooks';
 import cl from './ItemCard.module.scss';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {
-    changeItemQuantity,
-    decrementItem,
-    incrementItem,
-    addItem,
-} from '../../store/action-creators/cartActions';
 import { Link, useParams } from 'react-router-dom';
 import MyImage from '../UI/MyImage';
 import { CatalogItem } from '../../types/catalogItem';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
 import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
+import { cartSlice } from '../../store/reducers/cartReducer';
 
 const ItemCard = () => {
     const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
 
     const { code } = useParams();
 
-    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
-    const { items: cartItems } = useTypedSelector((state) => state.cart);
+    const { items: catalogItems } = useAppSelector((state) => state.catalog);
+    const { items: cartItems } = useAppSelector((state) => state.cart);
     const item = catalogItems.get(code || '') || new CatalogItem();
     const itemInCart = cartItems.get(item.code);
 
@@ -30,10 +24,12 @@ const ItemCard = () => {
     const [inputValue, setInputValue] = useState(String(itemInCart?.inCart || 0));
     const quantityInputRef = useRef<HTMLInputElement>(null);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const { incrementItem, decrementItem, addToCart, changeItemQuantity } = cartSlice.actions;
+
     const handleIncrementItem = () => {
         if (+inputValue === 0) {
-            dispatch(addItem(item));
+            dispatch(addToCart(item));
         } else {
             dispatch(incrementItem(item.code));
         }
@@ -44,7 +40,7 @@ const ItemCard = () => {
         }
         dispatch(decrementItem(item.code));
     };
-    const handleAddItem = () => dispatch(addItem(item));
+    const handleAddItem = () => dispatch(addToCart(item));
 
     const handleInputFocus = () => {
         setEditingQuantity(true);
@@ -75,10 +71,10 @@ const ItemCard = () => {
     const handleAcceptInput = () => {
         setEditingQuantity(false);
         if (cartItems.has(item.code)) {
-            dispatch(changeItemQuantity(item.code, +inputValue));
+            dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
         } else {
-            dispatch(addItem(item));
-            dispatch(changeItemQuantity(item.code, +inputValue));
+            dispatch(addToCart(item));
+            dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
         }
     };
 

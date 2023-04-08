@@ -1,19 +1,19 @@
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
-import { addItem } from '../../../store/action-creators/cartActions';
 import { ICatalogItem } from '../../../types/catalogItem';
 import cl from './CatalogItem.module.scss';
 import MyImage from '../../UI/MyImage';
 import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
+import { useAppDispatch } from '../../../hooks/ReduxHooks';
+import { cartSlice } from '../../../store/reducers/cartReducer';
 
 interface CatalogItemProps {
     item: ICatalogItem;
 }
 
 const CatalogItem = ({ item }: CatalogItemProps) => {
-    const dispatch = useDispatch();
-    const handleAddItem = () => dispatch(addItem(item));
+    const dispatch = useAppDispatch();
+    const { addToCart } = cartSlice.actions;
+    const handleAddItem = () => dispatch(addToCart(item));
 
     return (
         <div className={cl.item}>

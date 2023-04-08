@@ -1,5 +1,7 @@
-import { CartAction, CartActionTypes, ICartItem, ICartState } from '../../types/cartItem';
-import deepCopyMap from '../../utils/deepCopyMap';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { ICartItem, ICartState } from '../../types/cartItem';
+import { createCartObject } from '../../utils/createCartObject';
+import { ICatalogItem } from '../../types/catalogItem';
 
 const initialState: ICartState = {
     items: new Map<string, ICartItem>(),
@@ -7,119 +9,103 @@ const initialState: ICartState = {
     quantity: 0,
 };
 
-export const cartReducer = (state = initialState, action: CartAction): ICartState => {
-    let tempMap = deepCopyMap(state.items);
-    switch (action.type) {
-        case CartActionTypes.ADD_TO_CART: {
-            let item = action.payload;
-            let existingItem = tempMap.get(item.code);
+export const cartSlice = createSlice({
+    name: 'cart',
+    initialState,
+    reducers: {
+        addToCart: (state, action: PayloadAction<ICatalogItem>) => {
+            let item = createCartObject(action.payload);
+            let map = state.items;
+            let existingItem = map.get(item.code);
             if (existingItem) {
                 existingItem.inCart = existingItem.inCart + 1;
             } else {
-                tempMap.set(item.code, item);
+                map.set(item.code, item);
             }
-            return {
-                ...state,
-                items: tempMap,
-                sum: state.sum + item.price,
-                quantity: state.quantity + 1,
-            };
-        }
-        case CartActionTypes.REMOVE_FROM_CART: {
+            state.sum += item.price;
+            state.quantity += 1;
+        },
+        removeFromCart: (state, action: PayloadAction<string>) => {
             let itemCode = action.payload;
-            let itemPrice = 0;
-            let itemQuantity = 0;
-            let existingItem = tempMap.get(itemCode);
-            if (existingItem) {
-                itemPrice = existingItem.price;
-                itemQuantity = existingItem.inCart;
-                tempMap.delete(itemCode);
-            }
-            return {
-                ...state,
-                items: tempMap,
-                sum: Math.abs(state.sum - itemPrice * itemQuantity),
-                quantity: Math.abs(state.quantity - itemQuantity),
-            };
-        }
-        case CartActionTypes.INCREMENT_ITEM: {
-            let itemCode = action.payload;
+            let map = state.items;
             let itemPrice = 0;
             let quantity = 0;
-            let existingItem = tempMap.get(itemCode);
+            let existingItem = map.get(itemCode);
+            if (existingItem) {
+                itemPrice = existingItem.price;
+                quantity = existingItem.inCart;
+                map.delete(itemCode);
+            }
+            state.sum = Math.abs(state.sum - itemPrice * quantity);
+            state.quantity = Math.abs(state.quantity - quantity);
+        },
+        incrementItem: (state, action: PayloadAction<string>) => {
+            let itemCode = action.payload;
+            let map = state.items;
+            let itemPrice = 0;
+            let quantity = 0;
+            let existingItem = map.get(itemCode);
             if (existingItem) {
                 existingItem.inCart = existingItem.inCart + 1;
                 itemPrice = existingItem.price;
                 quantity = 1;
             }
-
-            return {
-                ...state,
-                items: tempMap,
-                sum: state.sum + itemPrice,
-                quantity: state.quantity + quantity,
-            };
-        }
-        case CartActionTypes.DECREMENT_ITEM: {
+            state.sum += itemPrice;
+            state.quantity += quantity;
+        },
+        decrementItem: (state, action: PayloadAction<string>) => {
             let itemCode = action.payload;
+            let map = state.items;
             let itemPrice = 0;
             let quantity = 0;
-            let existingItem = tempMap.get(itemCode);
+            let existingItem = map.get(itemCode);
             if (existingItem) {
                 let numInCart = existingItem.inCart;
                 itemPrice = existingItem.price;
                 quantity = 1;
                 switch (numInCart) {
                     case 1:
-                        tempMap.delete(itemCode);
+                        map.delete(itemCode);
                         break;
                     default:
                         existingItem.inCart = existingItem.inCart - 1;
                         break;
                 }
             }
-            return {
-                ...state,
-                items: tempMap,
-                sum: Math.abs(state.sum - itemPrice),
-                quantity: Math.abs(state.quantity - quantity),
-            };
-        }
-        case CartActionTypes.CHANGE_ITEM_QUANTITY: {
+            state.sum = Math.abs(state.sum - itemPrice);
+            state.quantity = Math.abs(state.quantity - quantity);
+        },
+        changeItemQuantity: (
+            state,
+            action: PayloadAction<{ itemCode: string; quantity: number }>
+        ) => {
             let itemCode = action.payload.itemCode;
             let quantity = action.payload.quantity;
+            let map = state.items;
             let priceDifference = 0;
             let quantityDifference = 0;
-            let existingItem = tempMap.get(itemCode);
+            let existingItem = map.get(itemCode);
             if (existingItem) {
                 quantityDifference = quantity - existingItem.inCart;
                 priceDifference = existingItem.price * quantityDifference;
                 switch (quantity) {
                     case 0:
-                        tempMap.delete(itemCode);
+                        map.delete(itemCode);
                         break;
                     default:
                         existingItem.inCart = quantity;
                         break;
                 }
             }
-            return {
-                ...state,
-                items: tempMap,
-                sum: Math.abs(state.sum + priceDifference),
-                quantity: Math.abs(state.quantity + quantityDifference),
-            };
-        }
-        case CartActionTypes.EMPTY_CART: {
-            return {
-                ...state,
-                items: new Map<string, ICartItem>(),
-                sum: 0,
-                quantity: 0,
-            };
-        }
-        default: {
-            return state;
-        }
-    }
-};
+            state.sum = Math.abs(state.sum + priceDifference);
+            state.quantity = Math.abs(state.quantity + quantityDifference);
+        },
+        emptyCart: (state) => {
+            state.items = new Map<string, ICartItem>();
+            state.sum = 0;
+            state.quantity = 0;
+        },
+    },
+});
+
+export default cartSlice.reducer;

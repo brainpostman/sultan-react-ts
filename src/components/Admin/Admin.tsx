@@ -1,5 +1,5 @@
 import { ChangeEvent, useMemo, useState } from 'react';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHooks';
 import { ICareFilter, ICatalogItem, CatalogItem } from '../../types/catalogItem';
 import List from '../UI/List';
 import cl from './Admin.module.scss';
@@ -12,17 +12,17 @@ import Pagination from '../UI/Pagination/Pagination';
 import Select from '../UI/Select/Select';
 import AdminItem from './AdminItem/AdminItem';
 import deepCopyMap from '../../utils/deepCopyMap';
-import { useDispatch } from 'react-redux';
-import { updateCatalog } from '../../store/action-creators/catalogActions';
 import Modal from '../UI/Modal/Modal';
 import { createCatalogMap } from '../../utils/createCatalogMap';
 import ItemEditModal from './ItemEditModal/ItemEditModal';
 import useItemFieldFilter from '../../hooks/useItemFieldFilter';
 import { createCareFiltersArr } from '../../utils/createCareFiltersArr';
+import { catalogSlice } from '../../store/reducers/catalogReducer';
 
 const Admin = () => {
-    const { items: catalogItems } = useTypedSelector((state) => state.catalog);
-    const dispatch = useDispatch();
+    const { items: catalogItems } = useAppSelector((state) => state.catalog);
+    const dispatch = useAppDispatch();
+    const { updateCatalog } = catalogSlice.actions;
 
     const [catalogMap, setCatalogMap] = useState<Map<string, ICatalogItem>>(
         deepCopyMap(catalogItems)

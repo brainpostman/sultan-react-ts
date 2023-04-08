@@ -102,14 +102,3 @@ export interface IManufacturerInfo {
 export interface ICatalogState {
     items: Map<string, ICatalogItem>;
 }
-
-export enum CatalogActionTypes {
-    UPDATE_CATALOG = 'UPDATE_CATALOG',
-}
-
-interface UpdateCatalogAction {
-    type: CatalogActionTypes.UPDATE_CATALOG;
-    payload: Map<string, ICatalogItem>;
-}
-
-export type CatalogAction = UpdateCatalogAction;

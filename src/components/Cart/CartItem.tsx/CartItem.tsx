@@ -1,15 +1,10 @@
 import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-    decrementItem,
-    incrementItem,
-    removeItem,
-    changeItemQuantity,
-} from '../../../store/action-creators/cartActions';
 import { ICartItem } from '../../../types/cartItem';
 import cl from './CartItem.module.scss';
 import MyImage from '../../UI/MyImage';
+import { useAppDispatch } from '../../../hooks/ReduxHooks';
+import { cartSlice } from '../../../store/reducers/cartReducer';
 
 interface CatalogItemProps {
     item: ICartItem;
@@ -20,10 +15,11 @@ const CartItem = ({ item }: CatalogItemProps) => {
     const [inputValue, setInputValue] = useState(String(item.inCart));
     const quantityInputRef = useRef<HTMLInputElement>(null);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const { incrementItem, decrementItem, removeFromCart, changeItemQuantity } = cartSlice.actions;
     const handleIncrementItem = () => dispatch(incrementItem(item.code));
     const handleDecrementItem = () => dispatch(decrementItem(item.code));
-    const handleRemoveItem = () => dispatch(removeItem(item.code));
+    const handleRemoveItem = () => dispatch(removeFromCart(item.code));
 
     const handleInputFocus = () => {
         setEditingQuantity(true);
@@ -41,7 +37,7 @@ const CartItem = ({ item }: CatalogItemProps) => {
 
     function handleAcceptInput() {
         setEditingQuantity(false);
-        dispatch(changeItemQuantity(item.code, +inputValue));
+        dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

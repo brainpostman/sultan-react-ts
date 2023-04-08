@@ -1,4 +1,17 @@
-import { legacy_createStore as createStore } from 'redux';
-import { rootReducer } from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from './reducers/cartReducer';
+import catalogReducer from './reducers/catalogReducer';
+import { enableMapSet } from 'immer';
 
-export const store = createStore(rootReducer);
+enableMapSet();
+
+export const store = configureStore({
+    reducer: {
+        cart: cartReducer,
+        catalog: catalogReducer,
+    },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;

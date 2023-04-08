@@ -12,8 +12,9 @@ export default function Header() {
     let burgerClasses = `${cl.burger}${menuOpen ? ' ' + cl.burger__active : ''}`;
     useEffect(() => {
         const mediaQueryList = window.matchMedia('(max-width: 1499px)');
+        handleWindowResize();
         function handleWindowResize() {
-            if (mediaQueryList.matches) {
+            if (!mediaQueryList.matches) {
                 setMenuOpen(false);
             }
         }

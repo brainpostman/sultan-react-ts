@@ -38,7 +38,7 @@ const Cart = () => {
                         <span>Корзина</span>
                     </Breadcrumbs>
                 )}
-                <h2 className={cl.cart__title}>КОРЗИНА</h2>
+                <h1 className={cl.cart__title}>КОРЗИНА</h1>
                 <List
                     items={Array.from(items.values())}
                     renderItem={(item: ICartItem) => {
@@ -47,7 +47,7 @@ const Cart = () => {
                     className={cl.cart__list}
                 />
                 <div className={cl.cart__buy}>
-                    <button className={cl.btn} onClick={handleOrder}>
+                    <button className={cl.btn} onClick={handleOrder} data-testid='handle-order'>
                         Оформить заказ
                     </button>
                     <span className={cl.cart__sum}>

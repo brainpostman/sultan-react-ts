@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import useCareFilter from '../../hooks/useCareFilter';
 import useCareState from '../../hooks/useCareState';
 import useMnfctState from '../../hooks/useMnfctState';
@@ -195,7 +195,7 @@ const Catalog = () => {
                     </Breadcrumbs>
                 )}
                 <section className={cl.catalog__titleAndSort}>
-                    <h2 className={cl.title}>КАТАЛОГ</h2>
+                    <h1 className={cl.title}>КАТАЛОГ</h1>
                     {!mobile && (
                         <div className={cl.sort}>
                             Сортировка:
@@ -235,14 +235,14 @@ const Catalog = () => {
                 </section>
                 <section className={cl.catalog__itemsAndFilters}>
                     <div className={cl.filters}>
-                        <h5 className={cl.filters__title}>
+                        <h3 className={cl.filters__title}>
                             ПОДБОР ПО ПАРАМЕТРАМ{' '}
                             {mobile && (
                                 <div className={filtersExpandClass} onClick={handleFilterExpand}>
                                     <div></div>
                                 </div>
                             )}
-                        </h5>
+                        </h3>
                         <div className={cl.filters__container} ref={filtersExpandRef}>
                             <div className={cl.filters__price}>
                                 <label>

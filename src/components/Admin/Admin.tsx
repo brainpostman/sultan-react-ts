@@ -167,7 +167,7 @@ const Admin = () => {
                     <span>Управление каталогом</span>
                 </Breadcrumbs>
                 <section className={cl.catalog__titleAndSort}>
-                    <h2 className={cl.title}>УПРАВЛЕНИЕ КАТАЛОГОМ</h2>
+                    <h1 className={cl.title}>УПРАВЛЕНИЕ КАТАЛОГОМ</h1>
                     <div className={cl.sort}>
                         Сортировка:
                         <Select

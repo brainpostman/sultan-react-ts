@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { ICatalogItem } from '../types/catalogItem';
 import { sortByPrice, sortByName } from '../utils/catalogSortCallbacks';
 
-const useCareFilter = (
+const useSort = (
     items: ICatalogItem[],
     sortType: string,
     sortDirection: string
@@ -28,4 +28,4 @@ const useCareFilter = (
     return sortedItems;
 };
 
-export default useCareFilter;
+export default useSort;

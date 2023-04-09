@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ICatalogItem } from '../../../types/catalogItem';
 import cl from './CatalogItem.module.scss';
 import MyImage from '../../UI/MyImage';
 import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
 import { useAppDispatch } from '../../../hooks/ReduxHooks';
 import { cartSlice } from '../../../store/reducers/cartReducer';
+import { ICatalogItem } from '../../../types/catalogItem';
 
 interface CatalogItemProps {
     item: ICatalogItem;
@@ -16,7 +16,7 @@ const CatalogItem = ({ item }: CatalogItemProps) => {
     const handleAddItem = () => dispatch(addToCart(item));
 
     return (
-        <div className={cl.item}>
+        <div className={cl.item} data-testid={`catalog-item-${item.code}`}>
             <MyImage
                 src={item.img}
                 containerClass={cl.item__image}
@@ -32,10 +32,10 @@ const CatalogItem = ({ item }: CatalogItemProps) => {
                     {item.amount} {item.unit}
                 </span>
             </p>
-            <Link to={`${item.code}`}>
-                <h5 className={cl.item__title}>
+            <Link to={`${item.code}`} data-testid={`item-link-${item.code}`}>
+                <h2 className={cl.item__title}>
                     <span>{item.brand}</span> {item.name}
-                </h5>
+                </h2>
             </Link>
             <div className={cl.item__info}>
                 <p>

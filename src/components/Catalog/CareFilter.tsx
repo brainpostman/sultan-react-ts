@@ -9,7 +9,10 @@ interface ICareFilterProps {
 
 const CareFilter = ({ filter, onClick, className, activeClass }: ICareFilterProps) => {
     return (
-        <div className={`${className} ${activeClass}`} onClick={() => onClick(filter.type)}>
+        <div
+            className={`${className} ${activeClass}`}
+            onClick={() => onClick(filter.type)}
+            data-testid={`care-filter-${filter.type}`}>
             {filter.value}
         </div>
     );

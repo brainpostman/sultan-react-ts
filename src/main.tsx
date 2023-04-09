@@ -4,9 +4,12 @@ import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './store';
 import './styles/main.scss';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>
-        <App />
+        <BrowserRouter basename='sultan-react-ts'>
+            <App />
+        </BrowserRouter>
     </Provider>
 );

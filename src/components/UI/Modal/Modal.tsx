@@ -13,7 +13,8 @@ const Modal = ({ className, children, onClick }: IModalProps) => {
                 event.stopPropagation();
                 if (onClick) onClick();
             }}
-            className={`${className ?? ''} ${cl.modalbackground}`}>
+            className={`${className ?? ''} ${cl.modalbackground}`}
+            data-testid='modal'>
             {children}
         </div>
     );

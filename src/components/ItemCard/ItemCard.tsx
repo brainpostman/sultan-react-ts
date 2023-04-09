@@ -117,9 +117,9 @@ const ItemCard = () => {
                     <MyImage src={item.img} containerClass={cl.image} errorClass={cl.imgerror} />
                     <div className={cl.itemInfo}>
                         <p className={cl.instore}>В наличии</p>
-                        <h2 className={cl.name}>
+                        <h1 className={cl.name}>
                             <strong> {item.brand} </strong> {item.name}
-                        </h2>
+                        </h1>
                         <p className={cl.unit}>
                             {item.unit === 'мл' ? (
                                 <img src='images/whh_bottle.svg' />

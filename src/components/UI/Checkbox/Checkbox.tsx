@@ -15,7 +15,13 @@ const Checkbox = <T,>({ item, onChange, checked, className, children }: ICheckbo
                     e.stopPropagation();
                     onChange(item);
                 }}>
-                <input type='checkbox' checked={checked} />
+                <input
+                    type='checkbox'
+                    checked={checked}
+                    onChange={(e) => {
+                        e.preventDefault();
+                    }}
+                />
                 {children}
             </label>
         </div>

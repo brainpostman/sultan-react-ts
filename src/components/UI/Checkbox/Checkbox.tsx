@@ -18,8 +18,8 @@ const Checkbox = <T,>({ item, onChange, checked, className, children }: ICheckbo
                 <input
                     type='checkbox'
                     checked={checked}
-                    onChange={(e) => {
-                        e.preventDefault();
+                    onChange={() => {
+                        return;
                     }}
                 />
                 {children}

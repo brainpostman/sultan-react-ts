@@ -16,7 +16,7 @@ const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogIte
     const [isRedacting, setIsRedacting] = useState(false);
 
     return (
-        <div className={cl.item}>
+        <div className={cl.item} data-testid='admin-item'>
             <MyImage
                 src={item.img}
                 containerClass={cl.item__image}
@@ -24,7 +24,7 @@ const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogIte
             />
             <div className={cl.info}>
                 <div className={cl.name}>
-                    Название: <span>{item.name}</span>
+                    Название: <span data-testid='item-name'>{item.name}</span>
                 </div>
                 <div className={cl.unit}>
                     Единица измерения: <span>{item.unit}</span>
@@ -67,7 +67,8 @@ const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogIte
             <div className={cl.item__controls}>
                 <button
                     className={`${cl.btn} ${cl.delete}`}
-                    onClick={() => handleDelete(item.code)}>
+                    onClick={() => handleDelete(item.code)}
+                    data-testid='item-delete'>
                     <img src='images/trash.svg' alt='Удалить' />
                 </button>
                 <button className={`${cl.btn} ${cl.redact}`} onClick={() => setIsRedacting(true)}>

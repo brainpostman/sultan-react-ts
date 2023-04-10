@@ -1,11 +1,11 @@
-import { actions } from '../../../store/reducers/cartReducer';
+import { actions } from '../store/reducers/cartReducer';
 import { describe, it, vi, expect } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import catalogJson from '../../../catalog.json';
-import { ICatalogItem } from '../../../types/catalogItem';
-import * as customReduxHooks from '../../../hooks/ReduxHooks';
-import CatalogItem from './CatalogItem';
+import catalogJson from '../catalog.json';
+import { ICatalogItem } from '../types/catalogItem';
+import * as customReduxHooks from '../hooks/ReduxHooks';
+import CatalogItem from '../components/Catalog/CatalogItem/CatalogItem';
 
 const item: ICatalogItem = catalogJson[0];
 

@@ -1,12 +1,12 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import Catalog from './Catalog';
-import * as customReduxHooks from '../../hooks/ReduxHooks';
-import { ICatalogItem } from '../../types/catalogItem';
-import catalogJson from '../../catalog.json';
+import Catalog from '../components/Catalog/Catalog';
+import * as customReduxHooks from '../hooks/ReduxHooks';
+import { ICatalogItem } from '../types/catalogItem';
+import catalogJson from '../catalog.json';
 import { MemoryRouter } from 'react-router';
 import { Route, Routes } from 'react-router-dom';
-import ItemCard from '../ItemCard/ItemCard';
+import ItemCard from '../components/ItemCard/ItemCard';
 
 const catalogMock = new Map<string, ICatalogItem>();
 for (let i = 0; i < 4; i++) {
@@ -27,6 +27,8 @@ describe('Catalog functionality testing', () => {
             sum: 0,
             quantity: 0,
         });
+        const dispatch = vi.fn();
+        vi.spyOn(customReduxHooks, 'useAppDispatch').mockReturnValue(dispatch);
     });
 
     afterEach(() => {

@@ -269,7 +269,10 @@ const Admin = () => {
                                 }}>
                                 Очистить каталог
                             </button>
-                            <button className={cl.btn} onClick={saveCatalogChanges}>
+                            <button
+                                className={cl.btn}
+                                onClick={saveCatalogChanges}
+                                data-testid='save-changes-btn'>
                                 Сохранить изменения
                             </button>
                         </div>

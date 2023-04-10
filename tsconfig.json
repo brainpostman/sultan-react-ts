@@ -18,12 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
   },
   "include": [
     "src",
     ".eslintrc.cjs",
-    "vite.config.ts"
+    "vite.config.ts",
+    "cypress.config.ts",
   ],
   "references": [
     {

@@ -1,12 +1,12 @@
-import { describe, it, vi } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import * as customReduxHooks from '../../hooks/ReduxHooks';
-import Cart from './Cart';
-import catalogJson from '../../catalog.json';
-import { ICartItem } from '../../types/cartItem';
-import { createCartObject } from '../../utils/createCartObject';
-import { actions } from '../../store/reducers/cartReducer';
+import * as customReduxHooks from '../hooks/ReduxHooks';
+import Cart from '../components/Cart/Cart';
+import catalogJson from '../catalog.json';
+import { ICartItem } from '../types/cartItem';
+import { createCartObject } from '../utils/createCartObject';
+import { actions } from '../store/reducers/cartReducer';
 
 const cartMock = new Map<string, ICartItem>();
 for (let i = 0; i < 2; i++) {

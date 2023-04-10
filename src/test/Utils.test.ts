@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import catalogJson from '../catalog.json';
-import { createMnfctrsArr } from './createMnfctrsArr';
+import { createMnfctrsArr } from '../utils/createMnfctrsArr';
 import { ICatalogItem } from '../types/catalogItem';
 
 describe('Utility functions testing', () => {

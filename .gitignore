@@ -10,6 +10,8 @@ lerna-debug.log*
 node_modules
 dist-ssr
 *.local
+cypress/videos
+cypress/screenshots
 
 # Editor directories and files
 .vscode/*

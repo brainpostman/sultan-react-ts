@@ -8,9 +8,13 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     plugins: [react()],
     base: '/sultan-react-ts/',
+    server: {
+        host: true,
+        port: 3000,
+    },
     test: {
         globals: true,
         environment: 'jsdom',
-        setupFiles: ['./src/setupTests.ts'],
+        setupFiles: ['./src/test/setupTests.ts'],
     },
 });

@@ -9,7 +9,7 @@ import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
 interface IItemEditModal {
     item: ICatalogItem;
     setIsRedacting: (value: React.SetStateAction<boolean>) => void;
-    saveChanges: (newCode: string, newItemProps: ICatalogItem) => void;
+    saveChanges: (newItemProps: ICatalogItem) => void;
 }
 
 const ItemEditModal = ({ item, setIsRedacting, saveChanges }: IItemEditModal) => {
@@ -231,7 +231,7 @@ const ItemEditModal = ({ item, setIsRedacting, saveChanges }: IItemEditModal) =>
                     <button onClick={cancelChanges} className={cl.btn}>
                         Отменить
                     </button>
-                    <button onClick={() => saveChanges(codeInput, newItemProps)} className={cl.btn}>
+                    <button onClick={() => saveChanges(newItemProps)} className={cl.btn}>
                         Сохранить
                     </button>
                 </div>

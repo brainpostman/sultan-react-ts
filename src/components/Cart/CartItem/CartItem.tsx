@@ -3,23 +3,22 @@ import { Link } from 'react-router-dom';
 import { ICartItem } from '../../../types/cartItem';
 import cl from './CartItem.module.scss';
 import MyImage from '../../UI/MyImage';
-import { useAppDispatch } from '../../../hooks/ReduxHooks';
-import { cartSlice } from '../../../store/reducers/cartReducer';
+import {
+    incrementItem,
+    decrementItem,
+    removeFromCart,
+    changeItemQuantity,
+} from '../../../store/cartStore';
+import { observer } from 'mobx-react-lite';
 
 interface CatalogItemProps {
     item: ICartItem;
 }
 
-const CartItem = ({ item }: CatalogItemProps) => {
+const CartItem = observer(({ item }: CatalogItemProps) => {
     const [editingQuantity, setEditingQuantity] = useState(false);
     const [inputValue, setInputValue] = useState(String(item.inCart));
     const quantityInputRef = useRef<HTMLInputElement>(null);
-
-    const dispatch = useAppDispatch();
-    const { incrementItem, decrementItem, removeFromCart, changeItemQuantity } = cartSlice.actions;
-    const handleIncrementItem = () => dispatch(incrementItem(item.code));
-    const handleDecrementItem = () => dispatch(decrementItem(item.code));
-    const handleRemoveItem = () => dispatch(removeFromCart(item.code));
 
     const handleInputFocus = () => {
         setEditingQuantity(true);
@@ -37,7 +36,7 @@ const CartItem = ({ item }: CatalogItemProps) => {
 
     function handleAcceptInput() {
         setEditingQuantity(false);
-        dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
+        changeItemQuantity(item.code, +inputValue);
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +81,9 @@ const CartItem = ({ item }: CatalogItemProps) => {
             </div>
             <div className={cl.item__controls}>
                 <div className={cl.item__quantity}>
-                    <button className={cl.item__changeAmount} onClick={handleDecrementItem}>
+                    <button
+                        className={cl.item__changeAmount}
+                        onClick={() => decrementItem(item.code)}>
                         -
                     </button>
                     <div className={cl.item__incart}>
@@ -103,7 +104,9 @@ const CartItem = ({ item }: CatalogItemProps) => {
                             )}
                         </label>
                     </div>
-                    <button className={cl.item__changeAmount} onClick={handleIncrementItem}>
+                    <button
+                        className={cl.item__changeAmount}
+                        onClick={() => incrementItem(item.code)}>
                         +
                     </button>
                 </div>
@@ -117,13 +120,13 @@ const CartItem = ({ item }: CatalogItemProps) => {
                 <div className={cl.item__remove}>
                     <button
                         className={`${cl.item__deletebtn} ${cl.btn}`}
-                        onClick={handleRemoveItem}>
+                        onClick={() => removeFromCart(item.code)}>
                         <img src='images/trash.svg' alt='Удалить' />
                     </button>
                 </div>
             </div>
         </div>
     );
-};
+});
 
 export default CartItem;

@@ -13,27 +13,24 @@ import Select from '../UI/Select/Select';
 import CareFilter from './CareFilter';
 import cl from './Catalog.module.scss';
 import Pagination from '../UI/Pagination/Pagination';
-import { useAppSelector } from '../../hooks/ReduxHooks';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
 import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
+import catalogStore from '../../store/catalogStore';
+import { observer } from 'mobx-react-lite';
 
-const Catalog = () => {
+const Catalog = observer(() => {
     //флаг адаптивной стилизации
     const mobile = useMobile(window.matchMedia('(max-width: 615px)'));
     //получение каталога из store (а там из localStorage)
-    const { items: catalogItems } = useAppSelector((state) => state.catalog);
-    const catalogArr = useMemo(() => {
-        return Array.from(catalogItems.values());
-    }, [catalogItems]);
     //состояния каталога
-    const [items, setItems] = useState<ICatalogItem[]>(catalogArr);
+    const [items, setItems] = useState<ICatalogItem[]>(catalogStore.catalogArr);
     //состояния фильтров производителей и промежутка цен
     const [mnfctQuery, setMnfctQuery] = useState('');
     const [minPrice, setMinPrice] = useState('0');
     const [maxPrice, setMaxPrice] = useState('99999');
     const [priceMnfctFilteredItems, setPriceMnfctFilteredItems] = useState<ICatalogItem[]>([
-        ...catalogArr,
+        ...catalogStore.catalogArr,
     ]);
     const defaultMnfct: IManufacturerInfo[] = useMemo(() => {
         return createMnfctrsArr([...items]);
@@ -161,7 +158,7 @@ const Catalog = () => {
     };
 
     const clearFilters = () => {
-        setPriceMnfctFilteredItems([...catalogArr]);
+        setPriceMnfctFilteredItems([...catalogStore.catalogArr]);
         setActiveMnfct(new Set<string>());
         setActiveCareFilters(new Set<string>());
         setMinPrice('0');
@@ -382,6 +379,6 @@ const Catalog = () => {
             </div>
         </main>
     );
-};
+});
 
 export default Catalog;

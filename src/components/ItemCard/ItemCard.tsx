@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHooks';
 import cl from './ItemCard.module.scss';
 import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import { useRef, useState } from 'react';
@@ -8,39 +7,39 @@ import { CatalogItem } from '../../types/catalogItem';
 import Back from '../UI/Back/Back';
 import useMobile from '../../hooks/useMobile';
 import { defaultCareFiltersArr } from '../../utils/createCareFiltersArr';
-import { cartSlice } from '../../store/reducers/cartReducer';
+import { getCatalogItem } from '../../store/catalogStore';
+import cartStore, {
+    getCartItem,
+    addToCart,
+    incrementItem,
+    decrementItem,
+    changeItemQuantity,
+} from '../../store/cartStore';
+import { observer } from 'mobx-react-lite';
 
-const ItemCard = () => {
+const ItemCard = observer(() => {
     const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
 
     const { code } = useParams();
-
-    const { items: catalogItems } = useAppSelector((state) => state.catalog);
-    const { items: cartItems } = useAppSelector((state) => state.cart);
-    const item = catalogItems.get(code || '') || new CatalogItem();
-    const itemInCart = cartItems.get(item.code);
+    const item = getCatalogItem(code || '') || new CatalogItem();
+    const itemInCart = getCartItem(item.code);
 
     const [editingQuantity, setEditingQuantity] = useState(false);
     const [inputValue, setInputValue] = useState(String(itemInCart?.inCart || 0));
     const quantityInputRef = useRef<HTMLInputElement>(null);
-
-    const dispatch = useAppDispatch();
-    const { incrementItem, decrementItem, addToCart, changeItemQuantity } = cartSlice.actions;
-
     const handleIncrementItem = () => {
         if (+inputValue === 0) {
-            dispatch(addToCart(item));
+            addToCart(item);
         } else {
-            dispatch(incrementItem(item.code));
+            incrementItem(item.code);
         }
     };
     const handleDecrementItem = () => {
         if (+inputValue > 0) {
             setInputValue((prevValue) => String(+prevValue - 1));
         }
-        dispatch(decrementItem(item.code));
+        decrementItem(item.code);
     };
-    const handleAddItem = () => dispatch(addToCart(item));
 
     const handleInputFocus = () => {
         setEditingQuantity(true);
@@ -70,11 +69,11 @@ const ItemCard = () => {
 
     const handleAcceptInput = () => {
         setEditingQuantity(false);
-        if (cartItems.has(item.code)) {
-            dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
+        if (cartStore.items.has(item.code)) {
+            changeItemQuantity(item.code, +inputValue);
         } else {
-            dispatch(addToCart(item));
-            dispatch(changeItemQuantity({ itemCode: item.code, quantity: +inputValue }));
+            addToCart(item);
+            changeItemQuantity(item.code, +inputValue);
         }
     };
 
@@ -162,7 +161,9 @@ const ItemCard = () => {
                                     +
                                 </button>
                             </div>
-                            <button className={`${cl.btn} ${cl.buy}`} onClick={handleAddItem}>
+                            <button
+                                className={`${cl.btn} ${cl.buy}`}
+                                onClick={() => addToCart(item)}>
                                 В КОРЗИНУ <img src='images/basket.svg' alt='' />
                             </button>
                             {mobile && (
@@ -266,6 +267,6 @@ const ItemCard = () => {
             </div>
         </main>
     );
-};
+});
 
 export default ItemCard;

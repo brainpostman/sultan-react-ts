@@ -1,5 +1,4 @@
 import { ChangeEvent, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHooks';
 import { ICareFilter, ICatalogItem, CatalogItem } from '../../types/catalogItem';
 import List from '../UI/List';
 import cl from './Admin.module.scss';
@@ -11,45 +10,32 @@ import Breadcrumbs from '../UI/Breadcrumbs/Breadcrumbs';
 import Pagination from '../UI/Pagination/Pagination';
 import Select from '../UI/Select/Select';
 import AdminItem from './AdminItem/AdminItem';
-import deepCopyMap from '../../utils/deepCopyMap';
 import Modal from '../UI/Modal/Modal';
-import { createCatalogMap } from '../../utils/createCatalogMap';
 import ItemEditModal from './ItemEditModal/ItemEditModal';
 import useItemFieldFilter from '../../hooks/useItemFieldFilter';
 import { createCareFiltersArr } from '../../utils/createCareFiltersArr';
-import { catalogSlice } from '../../store/reducers/catalogReducer';
+import catalogStore, {
+    clearCatalog,
+    updateItem as updateCatalogItem,
+    deleteItem as deleteCatalogItem,
+    resetCatalog,
+} from '../../store/catalogStore';
+import { observer } from 'mobx-react-lite';
 
-const Admin = () => {
-    const { items: catalogItems } = useAppSelector((state) => state.catalog);
-    const dispatch = useAppDispatch();
-    const { updateCatalog } = catalogSlice.actions;
-
-    const [catalogMap, setCatalogMap] = useState<Map<string, ICatalogItem>>(
-        deepCopyMap(catalogItems)
-    );
-    let catalogArr: ICatalogItem[] = useMemo(() => {
-        return Array.from(catalogMap.values());
-    }, [catalogMap]);
-
+const Admin = observer(() => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showSaveModal, setShowSaveModal] = useState(false);
 
-    const handleDelete = (itemCode: string) => {
-        let tempMap = deepCopyMap(catalogMap);
-        let bool = tempMap.delete(itemCode);
-        console.log(bool);
-        setCatalogMap(tempMap);
-    };
-
     const saveCatalogChanges = () => {
-        if (catalogMap.size === 0) {
+        if (catalogStore.catalogArr.length === 0) {
             localStorage.clear();
-            let tempMap: Map<string, ICatalogItem> = createCatalogMap();
-            dispatch(updateCatalog(tempMap));
+            clearCatalog();
+            resetCatalog();
         } else {
-            dispatch(updateCatalog(catalogMap));
-            let catalogStr = JSON.stringify(catalogArr);
+            let catalogStr = JSON.stringify(catalogStore.catalogArr);
             localStorage.setItem('catalog', catalogStr);
+            clearCatalog();
+            resetCatalog();
         }
         setShowSaveModal(true);
     };
@@ -91,7 +77,7 @@ const Admin = () => {
         mnfctQuery,
         brandQuery,
         descrQuery,
-        catalogArr
+        catalogStore.catalogArr
     );
 
     //состояние фильтра типа ухода
@@ -265,15 +251,16 @@ const Admin = () => {
                             <button
                                 className={cl.btn}
                                 onClick={() => {
-                                    setCatalogMap(new Map<string, ICatalogItem>());
+                                    clearCatalog();
                                 }}>
                                 Очистить каталог
                             </button>
                             <button
                                 className={cl.btn}
-                                onClick={saveCatalogChanges}
-                                data-testid='save-changes-btn'>
-                                Сохранить изменения
+                                onClick={() => {
+                                    saveCatalogChanges();
+                                }}>
+                                Сохранить в localStorage
                             </button>
                         </div>
                     </div>
@@ -284,9 +271,8 @@ const Admin = () => {
                                 <AdminItem
                                     item={item}
                                     key={item.code}
-                                    handleDelete={handleDelete}
-                                    catalogMap={deepCopyMap(catalogMap)}
-                                    setCatalogMap={setCatalogMap}
+                                    handleDelete={deleteCatalogItem}
+                                    saveItemChanges={updateCatalogItem}
                                 />
                             );
                         }}
@@ -309,16 +295,14 @@ const Admin = () => {
                 <ItemEditModal
                     item={new CatalogItem()}
                     setIsRedacting={setShowAddModal}
-                    saveChanges={(newCode: string, newItemProps: ICatalogItem) => {
-                        const tempMap = deepCopyMap(catalogMap);
-                        tempMap.set(newCode, newItemProps);
+                    saveChanges={(newItemProps: ICatalogItem) => {
+                        updateCatalogItem(newItemProps.code, newItemProps);
                         setShowAddModal(false);
-                        setCatalogMap(tempMap);
                     }}
                 />
             )}
         </main>
     );
-};
+});
 
 export default Admin;

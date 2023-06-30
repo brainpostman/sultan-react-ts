@@ -2,19 +2,15 @@ import { Link } from 'react-router-dom';
 import cl from './CatalogItem.module.scss';
 import MyImage from '../../UI/MyImage';
 import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
-import { useAppDispatch } from '../../../hooks/ReduxHooks';
-import { cartSlice } from '../../../store/reducers/cartReducer';
 import { ICatalogItem } from '../../../types/catalogItem';
+import { addToCart } from '../../../store/cartStore';
+import { observer } from 'mobx-react-lite';
 
 interface CatalogItemProps {
     item: ICatalogItem;
 }
 
-const CatalogItem = ({ item }: CatalogItemProps) => {
-    const dispatch = useAppDispatch();
-    const { addToCart } = cartSlice.actions;
-    const handleAddItem = () => dispatch(addToCart(item));
-
+const CatalogItem = observer(({ item }: CatalogItemProps) => {
     return (
         <div className={cl.item} data-testid={`catalog-item-${item.code}`}>
             <MyImage
@@ -65,12 +61,12 @@ const CatalogItem = ({ item }: CatalogItemProps) => {
                 <span className={cl.item__price}>
                     {String(item.price.toFixed(2)).replace(/\./g, ',').replace(/,00/g, '') + ' ₸'}
                 </span>
-                <button className={`${cl.btn} ${cl.item__buy}`} onClick={handleAddItem}>
+                <button className={`${cl.btn} ${cl.item__buy}`} onClick={() => addToCart(item)}>
                     В КОРЗИНУ <img src='images/basket.svg' alt='' />
                 </button>
             </div>
         </div>
     );
-};
+});
 
 export default CatalogItem;

@@ -8,11 +8,10 @@ import { defaultCareFiltersArr } from '../../../utils/createCareFiltersArr';
 interface CatalogItemProps {
     item: ICatalogItem;
     handleDelete: (itemCode: string) => void;
-    catalogMap: Map<string, ICatalogItem>;
-    setCatalogMap: (value: React.SetStateAction<Map<string, ICatalogItem>>) => void;
+    saveItemChanges: (itemCode: string, newItemProps: ICatalogItem) => void;
 }
 
-const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogItemProps) => {
+const AdminItem = ({ item, handleDelete, saveItemChanges }: CatalogItemProps) => {
     const [isRedacting, setIsRedacting] = useState(false);
 
     return (
@@ -79,11 +78,9 @@ const AdminItem = ({ item, handleDelete, catalogMap, setCatalogMap }: CatalogIte
                 <ItemEditModal
                     item={item}
                     setIsRedacting={setIsRedacting}
-                    saveChanges={(newCode: string, newItemProps: ICatalogItem) => {
-                        catalogMap.delete(item.code);
-                        catalogMap.set(newCode, newItemProps);
+                    saveChanges={(newItemProps: ICatalogItem) => {
+                        saveItemChanges(item.code, newItemProps);
                         setIsRedacting(false);
-                        setCatalogMap(catalogMap);
                     }}
                 />
             )}

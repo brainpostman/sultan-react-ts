@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import List from '../List';
 import cl from './Pagination.module.scss';
 import ItemsPerPage from './ItemsPerPage';
+import { observer } from 'mobx-react-lite';
 
 interface PaginationProps<T> {
     items: T[];
@@ -9,7 +10,7 @@ interface PaginationProps<T> {
     renderItem: (item: T) => React.ReactNode;
 }
 
-export default function Pagination<T>({ items, className, renderItem }: PaginationProps<T>) {
+const Pagination = observer(<T,>({ items, className, renderItem }: PaginationProps<T>) => {
     const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPage.DESKTOP);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -122,4 +123,6 @@ export default function Pagination<T>({ items, className, renderItem }: Paginati
             )}
         </div>
     );
-}
+});
+
+export default Pagination;

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/ReduxHooks';
 import cl from './Header.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useMobile from '../../hooks/useMobile';
+import cartStore from '../../store/cartStore';
+import { observer } from 'mobx-react-lite';
 
-export default function Header() {
-    const { sum, quantity } = useAppSelector((state) => state.cart);
+const Header = observer(() => {
     const [menuOpen, setMenuOpen] = useState(false);
     const mobile = useMobile(window.matchMedia('(max-width: 1023.99px)'));
     let burgerMenuClasses = `${cl.contacts__container}${menuOpen ? ' ' + cl.menuActive : ''}`;
@@ -134,14 +134,14 @@ export default function Header() {
                                         <div className={cl.cart__icon}>
                                             <img src='images/header/cart.svg' alt='' />
                                             <div className={cl.cart__items}>
-                                                {quantity > 99 ? 99 : quantity}
+                                                {cartStore.quantity > 99 ? 99 : cartStore.quantity}
                                             </div>
                                         </div>
 
                                         <div className={cl.cart__info}>
                                             <p>Корзина</p>
                                             <p>
-                                                {String(sum.toFixed(2))
+                                                {String(cartStore.sum.toFixed(2))
                                                     .replace(/\./g, ',')
                                                     .replace(/,00/g, '') + ' ₸'}
                                             </p>
@@ -176,13 +176,13 @@ export default function Header() {
                                         <div className={cl.cart__icon}>
                                             <img src='images/header/cart.svg' alt='' />
                                             <div className={cl.cart__items}>
-                                                {quantity > 99 ? 99 : quantity}
+                                                {cartStore.quantity > 99 ? 99 : cartStore.quantity}
                                             </div>
                                         </div>
                                         <div className={cl.cart__info}>
                                             <p>Корзина</p>
                                             <p>
-                                                {String(sum.toFixed(2))
+                                                {String(cartStore.sum.toFixed(2))
                                                     .replace(/\./g, ',')
                                                     .replace(/,00/g, '') + ' ₸'}
                                             </p>
@@ -218,13 +218,13 @@ export default function Header() {
                                         <div className={cl.cart__icon}>
                                             <img src='images/header/cart.svg' alt='' />
                                             <div className={cl.cart__items}>
-                                                {quantity > 99 ? 99 : quantity}
+                                                {cartStore.quantity > 99 ? 99 : cartStore.quantity}
                                             </div>
                                         </div>
                                         <div className={cl.cart__info}>
                                             <p>Корзина</p>
                                             <p>
-                                                {String(sum.toFixed(2))
+                                                {String(cartStore.sum.toFixed(2))
                                                     .replace(/\./g, ',')
                                                     .replace(/,00/g, '') + ' ₸'}
                                             </p>
@@ -252,4 +252,6 @@ export default function Header() {
                 }}></div>
         </header>
     );
-}
+});
+
+export default Header;
